@@ -17,33 +17,33 @@ export function showToast(message, type = 'info') {
   setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-// Clave para guardar los datos en el navegador
-const DEMO_STORAGE_KEY = 'sukidesu_demo_data';
+// Clave para guardar los datos en el navegador (con v2 para que el navegador no use la versión vieja)
+const DEMO_STORAGE_KEY = 'sukidesu_demo_data_v2';
 
 export const MenuAPI = {
-  // Carga los datos iniciales (del menu.json o del localStorage si ya se editó)
+  // Carga los datos iniciales (del menu.json o del localStorage)
   async fetchItems(isAdmin = false) {
     let dataStr = localStorage.getItem(DEMO_STORAGE_KEY);
     
     if (!dataStr) {
       try {
-        // Lee el menu.json que está en la misma carpeta
         const res = await fetch(`./menu.json?v=${new Date().getTime()}`);
         if (!res.ok) throw new Error("JSON no encontrado");
         const data = await res.json();
         
-        // Normalizamos la data para que tenga la estructura que espera el admin
+        // Guardamos los items, categorias, config Y EL TEMA (colores)
         const initialData = {
-          items: data.items || data.categorias?.flatMap(c => c.platos) || [],
-          categories: data.categories || data.categorias || [],
-          config: data.config || {}
+          items: data.items || [],
+          categories: data.categories || [],
+          config: data.config || {},
+          tema: data.tema || {} 
         };
         
         localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(initialData));
         return initialData;
       } catch (error) {
         console.error("Error al cargar JSON inicial:", error);
-        return { items: [], categories: [], config: {} };
+        return { items: [], categories: [], config: {}, tema: {} };
       }
     }
     
