@@ -4,7 +4,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './css/output.css',
   './js/api.js',
-  './images/screen.png',
+  './images/logo1.png',
   './images/icon-192x192.png',
   './images/icon-512x512.png'
 ];

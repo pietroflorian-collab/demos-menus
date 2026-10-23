@@ -1,0 +1,55 @@
+{
+  "items": [
+    { 
+      "id": "g1", 
+      "nombre": "Bowl Mediterráneo", 
+      "descripcion": "Quinoa, falafel, hummus, tomates cherry, pepino y aderezo de limón tahini.", 
+      "precio": 22000, 
+      "categoria": "Signature Bowls", 
+      "imagen_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400", 
+      "es_picante": false, 
+      "es_pausado": false, 
+      "texto_promo": "", 
+      "dias_promo": "" 
+    },
+    { 
+      "id": "g2", 
+      "nombre": "Bowl Proteico", 
+      "descripcion": "Arroz integral, pechuga de pollo a la parrilla, aguacate, huevo cocido y espinacas.", 
+      "precio": 26000, 
+      "categoria": "Signature Bowls", 
+      "imagen_url": "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=400", 
+      "es_picante": false, 
+      "es_pausado": false, 
+      "texto_promo": "Nuevo", 
+      "dias_promo": "" 
+    },
+    { 
+      "id": "g3", 
+      "nombre": "Jugo Verde Detox", 
+      "descripcion": "Espinaca, apio, manzana verde, jengibre y limón.", 
+      "precio": 9000, 
+      "categoria": "Jugos Fríos", 
+      "imagen_url": "https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&q=80&w=400", 
+      "es_picante": false, 
+      "es_pausado": false, 
+      "texto_promo": "", 
+      "dias_promo": "" 
+    }
+  ],
+  "categories": [
+    { "id": "c1", "nombre": "Signature Bowls", "es_pausada": false },
+    { "id": "c2", "nombre": "Jugos Fríos", "es_pausada": false }
+  ],
+  "config": { "promo_activa": "false" },
+  "tema": { 
+    "colorPrimario": "#0071E3", 
+    "colorFondo": "#FFFFFF", 
+    "colorTexto": "#1D1D1F", 
+    "colorTextoSuave": "#86868B", 
+    "colorBordes": "#E5E5E7", 
+    "radioBordes": "12", 
+    "fuenteHeroEslogan": "Inter", 
+    "fuentePlatoNombre": "Inter" 
+  }
+}

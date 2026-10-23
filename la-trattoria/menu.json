@@ -1,0 +1,22 @@
+{
+  "items": [
+    { "id": "t1", "nombre": "Bruschetta al Pomodoro", "descripcion": "Pan de masa madre tostado, tomates cherry frescos, albahaca y aceite de oliva extra virgen.", "precio": 12000, "categoria": "Antipasti", "imagen_url": "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "t2", "nombre": "Tagliatelle al Tartufo", "descripcion": "Pasta fresca hecha a mano, salsa de crema de trufa negra y parmesano reggiano.", "precio": 38000, "categoria": "Pasta Fresca", "imagen_url": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" }
+  ],
+  "categories": [
+    { "id": "c1", "nombre": "Antipasti", "es_pausada": false },
+    { "id": "c2", "nombre": "Pasta Fresca", "es_pausada": false }
+  ],
+  "config": { "promo_activa": "false" },
+  "tema": { 
+    "colorPrimario": "#B8934A", 
+    "colorFondo": "#FAF8F5", 
+    "colorTexto": "#0A0A0A", 
+    "colorTextoSuave": "#6B6B6B", 
+    "colorBordes": "#D4CFC7", 
+    "radioBordes": "2", 
+    "fuenteHeroEslogan": "Playfair Display", 
+    "fuentePlatoNombre": "Playfair Display", 
+    "fuentePlatoDescripcion": "Lato" 
+  }
+}

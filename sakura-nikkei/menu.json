@@ -1,0 +1,22 @@
+{
+  "items": [
+    { "id": "s1", "nombre": "Ceviche Nikkei", "descripcion": "Pescado blanco, leche de tigre, toques de soya y ají amarillo.", "precio": 18000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
+    { "id": "s2", "nombre": "Acevichado Roll", "descripcion": "Camarón tempura, palta, cubierto de láminas de pescado y leche de tigre.", "precio": 32000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
+  ],
+  "categories": [
+    { "id": "c1", "nombre": "Entradas", "es_pausada": false },
+    { "id": "c2", "nombre": "Rollos Especiales", "es_pausada": false }
+  ],
+  "config": { "promo_activa": "false" },
+  "tema": { 
+    "colorPrimario": "#AD2020", 
+    "colorFondo": "#000000", 
+    "colorTexto": "#e2e2e2", 
+    "colorTextoSuave": "#e3beba", 
+    "colorBordes": "#5b403e", 
+    "radioBordes": "8", 
+    "fuenteHeroEslogan": "Anybody", 
+    "fuentePlatoNombre": "Anybody", 
+    "fuentePlatoDescripcion": "Plus Jakarta Sans" 
+  }
+}
