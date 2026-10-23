@@ -1,162 +1,85 @@
 ﻿<!DOCTYPE html>
-<html class="dark" lang="es">
+<html class="light" lang="es">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title id="meta-title">Menú Digital</title>
-
-  <meta id="og-title" property="og:title" content="Menú Digital" />
-  <meta id="og-desc" property="og:description" content="" />
-  <meta id="og-image" property="og:image" content="" />
-  <meta id="og-url" property="og:url" content="" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image:width" content="1734" />
-  <meta property="og:image:height" content="907" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@700;800&family=Plus+Jakarta+Sans:wght@400&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <link href="css/output.css?v=2.0" rel="stylesheet"/>
-  
-  <script type="module">
-    import { AppConfig } from './js/config.js';
-    document.getElementById('meta-title').innerText = `${AppConfig.cliente.nombre} - Menú`;
-    document.getElementById('og-title').content = `${AppConfig.cliente.nombre} - Menú`;
-    document.getElementById('og-desc').content = AppConfig.cliente.descripcionComercial;
-    document.getElementById('og-url').content = AppConfig.urls.produccion;
-    document.getElementById('og-image').content = `${AppConfig.urls.produccion}images/logo1.png`;
-    document.getElementById('brand-title').innerText = `${AppConfig.cliente.nombre} MENÚ`;
-    document.getElementById('brand-slogan').innerText = AppConfig.cliente.eslogan;
-    document.getElementById('brand-desc').innerText = AppConfig.cliente.descripcionComercial;
-  </script>
-
-  <script type="module" src="js/api.js"></script>
-  <script type="module" src="js/ui.js"></script>
-  <script type="module" src="js/menu.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="css/output.css" rel="stylesheet"/>
   <style>
-    body {
-      background-image: url('images/logo1.png');
-      background-repeat: repeat;
-    }
-    button { border: none; outline: none; }
-    .menu-card-img-wrapper { position: relative; overflow: hidden; width: 100%; aspect-ratio: 4/5; }
-    @media (min-width: 640px) { .menu-card-img-wrapper { width: 40%; aspect-ratio: auto; min-height: 260px; } }
-    .menu-card-img-wrapper img { transition: transform 0.3s ease; }
-    .menu-card:hover .menu-card-img-wrapper img { transform: scale(1.05); }
-    .glow-hover:hover { box-shadow: 0 0 15px var(--color-primary); }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: theme('colors.surface'); }
-    ::-webkit-scrollbar-thumb { background: theme('colors.surface-container'); border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: theme('colors.primary-container'); }
+    body { background-color: #FAF8F5; font-family: 'Lato', sans-serif; color: #2C2C2C; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    .editorial-card { border-bottom: 1px solid #D4CFC7; padding-bottom: 2rem; margin-bottom: 2rem; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col bg-surface text-on-surface relative">
-
-  <div id="maintenance-overlay" class="fixed inset-0 bg-surface-container-lowest z-[99999] flex-col items-center justify-center p-6 hidden">
-    <div class="text-center max-w-md w-full bg-surface-container-low p-8 rounded-2xl border border-error/30 shadow-2xl">
-      <div class="w-20 h-20 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6">
-        <span class="material-symbols-outlined text-5xl">construction</span>
-      </div>
-      <h1 class="font-mant-titulo size-mant-titulo text-primary mb-3 uppercase">Servicio Temporalmente Inactivo</h1>
-      <p class="font-mant-descripcion size-mant-descripcion text-secondary leading-relaxed">Nuestro menú digital se encuentra en proceso de mantenimiento. Por favor, solicita asistencia a tu mesero para realizar tu pedido.</p>
-    </div>
+<body class="antialiased min-h-screen flex flex-col">
+  <div id="maintenance-overlay" class="fixed inset-0 bg-[#FAF8F5] z-[99999] flex-col items-center justify-center p-6 hidden">
+    <h1 class="text-3xl font-serif text-[#B71C1C] mb-2">Servicio en Mantenimiento</h1>
+    <p class="text-gray-600">Por favor, vuelve más tarde.</p>
   </div>
 
-  <nav class="bg-surface top-0 border-b border-outline-20 shadow-sm z-40 sticky">
-    <div class="flex justify-between items-center px-5 md:px-12 py-4 w-full max-w-7xl mx-auto">
-      <div id="brand-title" class="font-nav-negocio size-nav-negocio text-primary uppercase tracking-tighter">MENÚ</div>
-      <div class="flex items-center space-x-6"><a class="font-nav-link size-nav-link text-primary border-b-2 border-primary pb-1" href="#">Inicio</a></div>
+  <nav class="bg-[#FAF8F5] sticky top-0 border-b border-[#D4CFC7] z-40">
+    <div class="flex flex-col items-center justify-center px-6 py-8 w-full max-w-4xl mx-auto">
+      <div id="brand-title" class="text-3xl md:text-5xl font-serif tracking-widest text-[#111] uppercase mb-2">Cargando...</div>
+      <a class="text-xs tracking-widest uppercase text-gray-500 hover:text-[#B71C1C]" href="#">Inicio</a>
     </div>
   </nav>
 
-  <main class="flex-grow w-full max-w-7xl mx-auto px-5 md:px-12 py-6">
-    <section class="relative rounded-xl overflow-hidden mb-6 bg-surface-container border border-outline-20">
-      <div class="flex flex-col md:flex-row items-center p-4 md:p-6 gap-4 relative z-10">
-        <div class="flex-1 space-y-2">
-          <h1 id="brand-slogan" class="font-hero-eslogan size-hero-eslogan text-primary leading-tight"></h1>
-          <p id="brand-desc" class="font-hero-descripcion size-hero-descripcion text-on-surface max-w-lg"></p>
-        </div>
-        <div class="flex-1 flex justify-center items-center py-2 shrink-0">
-          <img alt="Mascota" class="w-28 h-28 md:w-52 md:h-52 object-contain rebote-amplio" src="images/logo1.png"/>
-        </div>
-      </div>
+  <main class="flex-grow w-full max-w-4xl mx-auto px-6 py-12">
+    <section class="text-center mb-16 border-b border-[#D4CFC7] pb-12">
+      <h1 id="brand-slogan" class="text-2xl italic text-[#B71C1C] mb-4"></h1>
+      <p id="brand-desc" class="text-gray-600 max-w-xl mx-auto leading-relaxed"></p>
     </section>
 
-    <section class="bg-surface-container-lowest border border-outline-20 rounded-xl p-2.5 md:p-3 mb-4">
-      <div id="category-bar" class="flex flex-wrap gap-2 md:gap-3 justify-center"></div>
+    <section class="mb-10">
+      <div id="category-bar" class="flex flex-wrap gap-4 justify-center"></div>
     </section>
 
     <section class="mb-16">
-      <h2 id="current-category-title" class="font-cat-titulo size-cat-titulo text-secondary mb-4 flex items-center"></h2>
-      <div id="loading-spinner" class="text-center py-12">
-        <span class="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
-        <p class="mt-2 text-secondary font-hero-descripcion">Cargando menú...</p>
-      </div>
-      <div id="menu-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 hidden"></div>
+      <h2 id="current-category-title" class="text-2xl font-serif italic text-center text-gray-800 mb-10"></h2>
+      <div id="loading-spinner" class="text-center py-12"><p class="text-gray-400 italic">Cargando...</p></div>
+      <div id="menu-grid" class="grid grid-cols-1 gap-12 hidden"></div>
     </section>
   </main>
 
-  <div id="fab-container" class="fixed bottom-6 right-6 z-40 hidden">
-    <button id="btn-open-cart" class="bg-primary-container text-sushi-white font-fab-texto size-fab-texto px-4 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-primary transition-all active:scale-95 border border-outline-40">
-      <span class="material-symbols-outlined text-xl">format_list_bulleted</span>
-      <span>Ver mi lista</span>
-      <span id="fab-badge" class="bg-surface text-sushi-white font-fab-badge size-fab-badge px-2 py-0.5 rounded-full font-bold ml-1 border border-outline-30">0</span>
+  <div id="fab-container" class="fixed bottom-8 right-8 z-40 hidden">
+    <button id="btn-open-cart" class="bg-[#B71C1C] text-white px-6 py-3 shadow-xl flex items-center gap-2 hover:bg-black transition-all">
+      <span class="material-symbols-outlined">menu_book</span>
+      <span class="font-serif uppercase tracking-wider text-sm">Mi Selección</span>
+      <span id="fab-badge" class="bg-[#FAF8F5] text-[#B71C1C] px-2 py-0.5 rounded-full text-xs font-bold ml-1">0</span>
     </button>
   </div>
 
-  <div id="order-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-surface border border-outline-30 rounded-xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] shadow-2xl">
-      <div class="p-4 border-b border-outline-20 flex justify-between items-center bg-surface-container-lowest">
-        <h3 class="font-modal-titulo size-modal-titulo text-primary flex items-center gap-2"><span class="material-symbols-outlined">format_list_bulleted</span> Selección</h3>
-        <button id="btn-close-cart" class="text-secondary hover:text-sushi-white"><span class="material-symbols-outlined pointer-events-none">close</span></button>
+  <!-- Modales necesarios para que menu.js funcione -->
+  <div id="order-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#FAF8F5] w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] shadow-2xl">
+      <div class="p-6 border-b border-[#D4CFC7] flex justify-between items-center">
+        <h3 class="text-xl font-serif italic">Tu Selección</h3>
+        <button id="btn-close-cart" class="text-gray-500 hover:text-black"><span class="material-symbols-outlined">close</span></button>
       </div>
-      <div id="modal-item-list" class="p-4 flex-grow overflow-y-auto space-y-3"></div>
-      <div class="p-4 border-t border-outline-20 bg-surface-container-lowest flex justify-between items-center gap-3">
-        <button id="btn-clear-cart" class="px-4 py-2 rounded-lg border border-error/40 text-error font-modal-botones size-modal-botones hover:bg-error/10">Limpiar lista</button>
-        <button id="btn-close-cart-bottom" class="px-5 py-2 rounded-lg bg-primary-container text-sushi-white font-modal-botones size-modal-botones hover:bg-primary">Cerrar</button>
+      <div id="modal-item-list" class="p-6 flex-grow overflow-y-auto space-y-4"></div>
+      <div class="p-6 border-t border-[#D4CFC7] flex justify-between items-center gap-3">
+        <button id="btn-clear-cart" class="text-[#B71C1C] font-serif italic text-sm">Limpiar</button>
+        <button id="btn-close-cart-bottom" class="bg-black text-white px-6 py-2 font-serif text-sm uppercase">Cerrar</button>
       </div>
     </div>
   </div>
-
+  
   <div id="footer-container"></div>
-
-  <div id="clientePromoModal" class="fixed inset-0 hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300 z-[9999] bg-surface-container-lowest/85 backdrop-blur-md">
-    <div class="w-full bg-surface-container-low rounded-xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden transform scale-95 transition-transform duration-300 relative max-w-lg aspect-[512/192]" id="clientePromoContent">
-      <button id="close-cliente-promo" class="absolute top-2 right-2 z-30 bg-surface/60 hover:bg-surface text-secondary hover:text-on-surface p-1 rounded-full backdrop-blur-sm transition-colors border border-outline-30"><span class="material-symbols-outlined">close</span></button>
-      <img id="cliente-promo-img" src="" class="absolute inset-0 w-full h-full object-cover object-left z-0" />
-      <div class="absolute inset-0 flex z-20 pointer-events-none">
-        <div style="width: 45%;"></div>
-        <div class="flex flex-col justify-center items-end text-right p-3 sm:p-4 w-[55%]">
-          <div class="flex items-center gap-1 sm:gap-1.5 mb-1 sm:mb-2">
-            <span class="material-symbols-outlined text-wasabi-green text-[14px] sm:text-base">campaign</span>
-            <h3 class="font-plato-tag size-plato-tag text-secondary-fixed uppercase tracking-wide leading-none">¡Novedad!</h3>
-          </div>
-          <p id="cliente-promo-texto" class="font-promo-texto size-promo-texto text-sushi-white leading-tight mb-2 sm:mb-3 drop-shadow-md line-clamp-3"></p>
-          <button id="btn-entendido-promo" class="bg-primary-container text-sushi-white px-3 sm:px-4 py-1.5 font-promo-botones size-promo-botones rounded-lg shadow-lg pointer-events-auto hover:bg-secondary-fixed hover:text-surface-container-low transition-colors">¡Ver el Menú!</button>
-        </div>
+  <div id="clientePromoModal" class="fixed inset-0 hidden items-center justify-center z-[9999] bg-black/50 backdrop-blur-sm">
+      <div class="bg-[#FAF8F5] p-6 max-w-md w-full border border-[#D4CFC7]" id="clientePromoContent">
+          <img id="cliente-promo-img" src="" class="w-full mb-4 hidden" />
+          <p id="cliente-promo-texto" class="text-gray-800 text-center mb-4 font-serif italic"></p>
+          <button id="btn-entendido-promo" class="w-full bg-[#B71C1C] text-white py-2 font-serif">Entendido</button>
       </div>
-    </div>
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('admin') === 'true') {
-        const backBtn = document.createElement('a');
-        backBtn.href = 'admin.html';
-        backBtn.className = 'fixed bottom-6 left-6 z-[100] bg-surface-container-high text-primary font-promo-botones px-4 py-3 rounded-full shadow-2xl border border-primary/40 flex items-center gap-2 hover:bg-surface-bright transition-all active:scale-95';
-        backBtn.innerHTML = '<span class="material-symbols-outlined text-xl pointer-events-none">arrow_back</span><span class="pointer-events-none">Volver al Gestor</span>';
-        document.body.appendChild(backBtn);
-      }
-    });
-  </script>
 
   <script type="module">
     import { footerHTML } from './js/configFooter.js';
     document.getElementById('footer-container').innerHTML = footerHTML;
   </script>
+  <script type="module" src="js/api.js"></script>
+  <script type="module" src="js/ui.js"></script>
+  <script type="module" src="js/menu.js"></script>
 </body>
 </html>
