@@ -1,5 +1,6 @@
 ﻿﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
 import { UI } from './ui.js';
+import { UIMinimal } from './ui-minimal.js';
 
 const SukidesuMenu = {
   allItems: [], categoriesList: [], config: {}, selectedCategory: "", STORAGE_KEY: "sukidesu_order_selection",
@@ -149,22 +150,29 @@ const SukidesuMenu = {
     if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined mr-2 text-primary">restaurant_menu</span> ${escapeHTML(this.selectedCategory)}`;
   },
 
-  renderMenu() {
-    const grid = document.getElementById("menu-grid"); if (!grid) return;
-    const rawToday = new Date().toLocaleDateString('es-CO', { timeZone: 'America/Bogota', weekday: 'long' }).toLowerCase();
-    const today = rawToday.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    renderMenu() {
+    const grid = document.getElementById("menu-grid"); 
+    if (!grid) return;
+    
     const filtered = this.allItems.filter(i => {
-      const cat = (i.categoria || "").toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const activeDays = i.dias_promo ? i.dias_promo.split(',').map(d => d.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) : [];
-      const isPromoToday = activeDays.some(d => d.startsWith(today) || today.startsWith(d));
-      if (this.selectedCategory === "Combos y Promo") { if (cat === "combos" || cat === "combo") return true; if (isPromoToday) return true; return false; }
+      // Lógica de filtrado (promos, categorías, etc.)
+      const activeDays = i.dias_promo ? i.dias_promo.split(',') : [];
+      const today = new Date().toLocaleDateString('es-CO', { weekday: 'long' }).toLowerCase();
+      const isPromoToday = activeDays.some(d => d.trim().toLowerCase().includes(today));
+      
+      if (this.selectedCategory === "Combos y Promo") {
+        return isPromoToday || i.categoria.toLowerCase().includes("combo");
+      }
       return i.categoria === this.selectedCategory;
     });
+
     if (filtered.length === 0) {
-      grid.innerHTML = `<div class="col-span-full text-center py-12 bg-surface-container rounded-xl border border-dashed border-outline-30 my-4"><span class="material-symbols-outlined text-secondary text-5xl mb-3">ramen_dining</span><h3 class="font-plato-nombre size-plato-nombre text-secondary">No hay platos disponibles</h3><p class="font-plato-descripcion size-plato-descripcion text-secondary/70 mt-1">Pronto añadiremos nuevas opciones.</p></div>`;
+      grid.innerHTML = `<div class="col-span-full text-center py-12"><p class="text-gray-500">No hay platos disponibles en esta categoría.</p></div>`;
       return;
     }
-    grid.innerHTML = filtered.map(item => UI.generarTarjetaPlato(item, 'client', this.getSelection())).join("");
+
+    // USAMOS LA NUEVA UI
+    grid.innerHTML = filtered.map(item => UIMinimal.generarTarjetaPlato(item, 'client', this.getSelection())).join("");
   },
 
   filterCategory(cat) { this.selectedCategory = cat; this.setupCategoryFilter(); this.renderMenu(); },

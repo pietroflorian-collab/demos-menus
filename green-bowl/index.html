@@ -1,79 +1,123 @@
 ﻿<!DOCTYPE html>
-<html class="light" lang="es">
+<html lang="es">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menú Digital</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <link href="css/output.css" rel="stylesheet"/>
+  <title>Green Bowl - Menú</title>
+  
+  <!-- Fuentes y Estilos (Mantenemos tu output.css, pero agregamos el CDN de Tailwind para que Stitch se vea igual) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1d1d1f', secondary: '#005ab7', surface: '#f9f9f9',
+            'surface-container-lowest': '#ffffff', 'surface-container': '#eeeeee',
+            'on-surface': '#1a1c1c', 'on-surface-variant': '#46464a',
+            'on-secondary': '#ffffff', 'on-primary': '#ffffff'
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
   <style>
-    body { background-color: #FAFAFA; font-family: 'Inter', sans-serif; color: #1D1D1F; }
-    .card { background: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 16px; transition: transform 0.2s; }
-    .card:hover { transform: translateY(-2px); }
+    body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
-  <div id="maintenance-overlay" class="fixed inset-0 bg-white z-[99999] flex-col items-center justify-center p-6 hidden">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">Servicio en Mantenimiento</h1>
-    <p class="text-gray-500">Por favor, vuelve más tarde.</p>
-  </div>
+<body class="bg-surface antialiased min-h-screen flex flex-col">
 
-  <nav class="bg-white sticky top-0 border-b border-gray-200 z-40">
-    <div class="flex justify-between items-center px-6 py-4 w-full max-w-5xl mx-auto">
-      <div id="brand-title" class="text-xl font-semibold tracking-tight text-gray-900">Cargando...</div>
-      <a class="text-sm font-medium text-blue-600 hover:text-blue-700" href="#">Inicio</a>
+  <!-- HEADER FIJO -->
+  <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-full">
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-semibold tracking-tight text-primary" id="brand-title">Cargando...</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6">
+        <a class="text-sm font-medium text-primary" href="#">Inicio</a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
-  <main class="flex-grow w-full max-w-5xl mx-auto px-6 py-12">
-    <section class="text-center mb-16">
-      <h1 id="brand-slogan" class="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-4"></h1>
-      <p id="brand-desc" class="text-lg text-gray-500 max-w-2xl mx-auto"></p>
+  <main class="w-full pt-16 min-h-screen">
+    <!-- HERO SECTION -->
+    <section class="w-full py-16 text-center px-4 bg-surface">
+      <div class="max-w-3xl mx-auto flex flex-col items-center">
+        <h1 id="brand-slogan" class="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-4"></h1>
+        <p id="brand-desc" class="text-lg text-on-surface-variant max-w-xl mx-auto"></p>
+      </div>
     </section>
 
-    <section class="mb-10">
-      <div id="category-bar" class="flex flex-wrap gap-2 justify-center"></div>
-    </section>
+    <!-- CATEGORÍAS STICKY -->
+    <nav class="sticky top-16 z-30 w-full bg-white/90 backdrop-blur-md py-4 shadow-sm">
+      <div id="category-bar" class="max-w-5xl mx-auto px-4 flex items-center gap-3 overflow-x-auto no-scrollbar">
+        <!-- Aquí menu.js inyectará las categorías -->
+      </div>
+    </nav>
 
-    <section class="mb-16">
-      <h2 id="current-category-title" class="text-2xl font-semibold text-gray-900 mb-6"></h2>
-      <div id="loading-spinner" class="text-center py-12"><p class="text-gray-500">Cargando menú...</p></div>
-      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden"></div>
+    <!-- GRILLA DE PLATOS -->
+    <section class="w-full max-w-5xl mx-auto px-4 py-10 mb-20">
+      <div class="flex items-baseline justify-between mb-8">
+        <h2 id="current-category-title" class="text-2xl font-bold text-primary tracking-tight"></h2>
+      </div>
+      
+      <div id="loading-spinner" class="text-center py-12 hidden">
+        <p class="text-on-surface-variant">Cargando menú...</p>
+      </div>
+      
+      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Aquí menu.js inyectará los platos -->
+      </div>
     </section>
   </main>
 
+  <!-- BOTÓN FLOTANTE (FAB) -->
   <div id="fab-container" class="fixed bottom-8 right-8 z-40 hidden">
-    <button id="btn-open-cart" class="bg-blue-600 text-white font-medium px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-blue-700 transition-all">
-      <span class="material-symbols-outlined">shopping_bag</span>
+    <button id="btn-open-cart" class="rounded-full px-6 py-3.5 shadow-xl flex items-center gap-3 bg-secondary text-white font-semibold transition-transform duration-200 hover:scale-105 active:scale-95">
+      <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
       <span>Ver mi lista</span>
-      <span id="fab-badge" class="bg-white text-blue-600 px-2 py-0.5 rounded-full text-xs font-bold ml-1">0</span>
+      <span id="fab-badge" class="w-6 h-6 rounded-full bg-white text-secondary font-bold text-xs flex items-center justify-center">0</span>
     </button>
   </div>
 
-  <!-- Modales necesarios para que menu.js funcione -->
-  <div id="order-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] shadow-2xl">
-      <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-        <h3 class="text-lg font-semibold">Tu Selección</h3>
-        <button id="btn-close-cart" class="text-gray-400 hover:text-gray-900"><span class="material-symbols-outlined">close</span></button>
+  <!-- MODAL DE LISTA (CARRITO) -->
+  <div id="order-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity">
+    <div class="bg-white rounded-2xl w-full max-w-md flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform" id="modal-content">
+      
+      <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-white">
+        <h3 class="text-xl font-bold text-primary flex items-center gap-2">
+          <span class="material-symbols-outlined">shopping_bag</span> Tu Pedido
+        </h3>
+        <button id="btn-close-cart" class="text-gray-400 hover:text-gray-900 transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
       </div>
-      <div id="modal-item-list" class="p-5 flex-grow overflow-y-auto space-y-4"></div>
-      <div class="p-5 border-t border-gray-100 flex justify-between items-center gap-3">
-        <button id="btn-clear-cart" class="text-red-500 font-medium text-sm">Limpiar</button>
-        <button id="btn-close-cart-bottom" class="bg-gray-900 text-white px-6 py-2 rounded-lg font-medium">Cerrar</button>
+
+      <div id="modal-item-list" class="p-5 flex-grow overflow-y-auto space-y-4 bg-surface">
+        <!-- Aquí menu.js inyecta los items -->
+      </div>
+
+      <div class="p-5 bg-white border-t border-gray-100 flex flex-col gap-3">
+        <!-- BOTÓN DE WHATSAPP -->
+        <button id="btn-whatsapp-checkout" class="w-full bg-[#25D366] text-white py-3.5 rounded-full font-bold text-lg hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2 shadow-lg">
+          <span class="material-symbols-outlined">whatsapp</span>
+          Pedir por WhatsApp
+        </button>
+        <button id="btn-clear-cart" class="w-full text-red-500 font-medium text-sm py-2">Limpiar Lista</button>
       </div>
     </div>
   </div>
-  
-  <div id="footer-container"></div>
-  <div id="clientePromoModal" class="fixed inset-0 hidden items-center justify-center z-[9999] bg-black/50 backdrop-blur-sm">
-      <div class="bg-white p-6 rounded-xl max-w-md w-full" id="clientePromoContent">
-          <img id="cliente-promo-img" src="" class="w-full rounded-lg mb-4 hidden" />
-          <p id="cliente-promo-texto" class="text-gray-800 text-center mb-4"></p>
-          <button id="btn-entendido-promo" class="w-full bg-blue-600 text-white py-2 rounded-lg">Entendido</button>
-      </div>
-  </div>
 
+  <!-- FOOTER -->
+  <div id="footer-container"></div>
+
+  <!-- SCRIPTS -->
   <script type="module">
     import { footerHTML } from './js/configFooter.js';
     document.getElementById('footer-container').innerHTML = footerHTML;
