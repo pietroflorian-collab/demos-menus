@@ -30,9 +30,9 @@ export const UIMinimal = {
           <span>Editar</span>
         </button>
       `;
-    } else {
+     } else {
       actionBtn = `
-        <button onclick="window.toggleSelection('${item.id}', '${escapeHTML(item.nombre).replace(/'/g, "\\'")}')" class="flex items-center gap-2 ${isSelected ? 'bg-wasabi-green text-surface' : 'bg-secondary text-on-secondary'} px-4 py-2 rounded-full font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
+        <button data-action="add-to-cart" data-id="${item.id}" data-name="${escapeHTML(item.nombre).replace(/'/g, "\\'")}" class="flex items-center gap-2 ${isSelected ? 'bg-green-600 text-white' : 'bg-[#005ab7] text-white'} px-4 py-2 rounded-full font-medium text-sm hover:opacity-90 active:scale-95 transition-all shadow-sm">
           <span class="material-symbols-outlined text-[18px]">${isSelected ? 'check' : 'add'}</span>
           <span>${isSelected ? 'Agregado' : 'Añadir'}</span>
         </button>
