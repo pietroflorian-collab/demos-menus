@@ -9,8 +9,8 @@ export const AppConfig = {
     representanteLegal: "Green Bowl SAS",
     documentoIdentidad: "NIT 900.000.000-0",
     declaracionTributaria: "No Responsable de IVA",
-    desarrollador: "Tu Agencia",
-    whatsappDev: "+573000000000"
+    desarrollador: "Pietro Florian Galea",
+    whatsappDev: "+573025303152"
   },
   
   // Vaciamos Firebase para que no haya rastro del proyecto cuentas-cop

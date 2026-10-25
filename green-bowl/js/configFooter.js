@@ -1,8 +1,8 @@
 ﻿export const datosEstablecimiento = {
     nombre: "Green Bowl",
     correoPQR: "hola@greenbowl.com",
-    desarrollador: "Tu Agencia de Desarrollo",
-    whatsappDev: "+573000000000",
+    desarrollador: "Pietro Florian Galea",
+    whatsappDev: "+573025303152",
     urlSIC: "https://www.sic.gov.co/"
 };
 
