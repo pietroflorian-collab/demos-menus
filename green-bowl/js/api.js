@@ -17,11 +17,9 @@ export function showToast(message, type = 'info') {
   setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-// Clave para guardar los datos en el navegador (con v2 para que el navegador no use la versión vieja)
-const DEMO_STORAGE_KEY = 'sukidesu_demo_data_v2';
+const DEMO_STORAGE_KEY = 'demo_data_greenbowl_v1';
 
 export const MenuAPI = {
-  // Carga los datos iniciales (del menu.json o del localStorage)
   async fetchItems(isAdmin = false) {
     let dataStr = localStorage.getItem(DEMO_STORAGE_KEY);
     
@@ -31,7 +29,6 @@ export const MenuAPI = {
         if (!res.ok) throw new Error("JSON no encontrado");
         const data = await res.json();
         
-        // Guardamos los items, categorias, config Y EL TEMA (colores)
         const initialData = {
           items: data.items || [],
           categories: data.categories || [],
@@ -50,7 +47,6 @@ export const MenuAPI = {
     return JSON.parse(dataStr);
   },
 
-  // Simula la publicación sin llamar a GitHub
   async publishMenuJSON() {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -59,8 +55,6 @@ export const MenuAPI = {
     });
   },
 
-  // ---- OPERACIONES CRUD EN LOCALSTORAGE ----
-  
   async createItem(data) {
     const db = JSON.parse(localStorage.getItem(DEMO_STORAGE_KEY));
     data.id = 'item_' + Date.now();

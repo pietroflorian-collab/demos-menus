@@ -1,23 +1,21 @@
 export const AppConfig = {
-  // 1. DATOS DE IDENTIDAD
   cliente: {
     nombre: "Green Bowl",
     eslogan: "Come limpio, vive mejor",
-    descripcionComercial: "Ingredientes orgánicos, cosechados éticamente y preparados al instante para nutrir tu día.",
-    whatsappCliente: "+573000000000", // Pon aquí el número real para el checkout
+    descripcionComercial: "Ingredientes orgánicos, cosechados éticamente y preparados al instante.",
+    whatsappCliente: "+573000000000", 
     correoPQR: "hola@greenbowl.com",
-    direccionLegal: "Calle 123",
-    representanteLegal: "Tu Nombre",
-    documentoIdentidad: "CC 12345678",
+    direccionLegal: "Calle Falsa 123",
+    representanteLegal: "Green Bowl SAS",
+    documentoIdentidad: "NIT 900.000.000-0",
     declaracionTributaria: "No Responsable de IVA",
     desarrollador: "Tu Agencia",
     whatsappDev: "+573000000000"
   },
+  
+  // Vaciamos Firebase para que no haya rastro del proyecto cuentas-cop
+  firebase: {}, 
 
-  // 2. FIREBASE (No se usa en la demo, pero el código lo pide)
-  firebase: {},
-
-  // 3. URLs
   urls: {
     produccion: "https://demos-menus.pages.dev/green-bowl",
     recursosCdn: "", 
