@@ -18,7 +18,7 @@ export function showToast(message, type = 'info') {
 }
 
 // Clave para guardar los datos en el navegador (con v2 para que el navegador no use la versión vieja)
-const DEMO_STORAGE_KEY = 'sukidesu_demo_data_v2';
+const DEMO_STORAGE_KEY = 'demo_data_trattoria_v1';
 
 export const MenuAPI = {
   // Carga los datos iniciales (del menu.json o del localStorage)
