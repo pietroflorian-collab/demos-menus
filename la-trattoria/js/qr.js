@@ -7,7 +7,6 @@ export const QRGenerator = {
   init() {
     if (this.isInitialized) return;
     
-    // Inicializar el motor vectorial
     this.qrCode = new QRCodeStyling({
       width: 303,
       height: 303,
@@ -60,10 +59,10 @@ export const QRGenerator = {
   update() {
     if (!this.qrCode) return;
 
-    let baseUrl = document.getElementById('qr-input-url')?.value.trim() || "https://menusukidesu.sukidesumenu.workers.dev/?v=2";
+    let baseUrl = document.getElementById('qr-input-url')?.value.trim() || "https://tu-dominio.com";
     if(baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
     
-    const textoQR = document.getElementById('qr-input-texto')?.value.trim() || 'MENÚ';
+    const textoQR = document.getElementById('qr-input-texto')?.value.trim() || 'MESA';
     document.getElementById('qr-preview-text').innerText = textoQR;
 
     const hoy = new Date();
@@ -73,7 +72,7 @@ export const QRGenerator = {
     const dotsType = document.getElementById('qr-style-dots')?.value || "rounded";
     const cornersType = document.getElementById('qr-style-corners')?.value || "extra-rounded";
     const colorDots = document.getElementById('qr-color-dots')?.value || "#000000";
-    const colorCorners = document.getElementById('qr-color-corners')?.value || "#b71f22";
+    const colorCorners = document.getElementById('qr-color-corners')?.value || "#000000";
     const colorBg = document.getElementById('qr-color-bg')?.value || "#ffffff";
     const hideBgBehindLogo = document.getElementById('qr-logo-bg')?.checked ?? true;
 
@@ -108,40 +107,33 @@ export const QRGenerator = {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
-      // Lienzo Vertical (Formato Acrílico/Póster)
       canvas.width = 800;
       canvas.height = 1200;
 
-      // Fondo oscuro
-      ctx.fillStyle = '#131313';
+      ctx.fillStyle = '#121212';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Gradiente central radial sutil
       const gradient = ctx.createRadialGradient(400, 600, 100, 400, 600, 800);
-      gradient.addColorStop(0, '#2a1214');
-      gradient.addColorStop(1, '#131313');
+      gradient.addColorStop(0, '#2a2a2a');
+      gradient.addColorStop(1, '#121212');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Textos Superiores
-      ctx.fillStyle = '#b71f22'; // Rojo primario
+      ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 50px "Space Grotesk", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('SUKIDESU SUSHI', 400, 150);
+      ctx.fillText('MENÚ DIGITAL', 400, 150);
       
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#cccccc';
       ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText('ESCANEA PARA VER EL MENÚ', 400, 220);
+      ctx.fillText('ESCANEA PARA VER LA CARTA', 400, 220);
 
-      // Extraer el QR renderizado en alta calidad
       const qrBlob = await this.qrCode.getRawData("png");
       const qrUrl = URL.createObjectURL(qrBlob);
       
-      // Dibujar QR y marco
       await new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
-          // Marco blanco
           ctx.fillStyle = '#ffffff';
           ctx.shadowColor = 'rgba(0,0,0,0.5)';
           ctx.shadowBlur = 20;
@@ -150,24 +142,21 @@ export const QRGenerator = {
           ctx.fill();
           ctx.shadowBlur = 0;
           
-          // QR
           ctx.drawImage(img, 175, 305, 450, 450);
 
-          // Textos Inferiores
-          ctx.fillStyle = '#ACC677'; // Wasabi
+          ctx.fillStyle = '#ffffff';
           ctx.font = 'bold 70px "Anybody", sans-serif';
           ctx.fillText(textoQR.toUpperCase(), 400, 920);
 
           ctx.fillStyle = '#888888';
           ctx.font = '22px sans-serif';
-          ctx.fillText('Experimenta los sabores más audaces.', 400, 1020);
+          ctx.fillText('Disfruta de nuestra selección.', 400, 1020);
 
           resolve();
         };
         img.src = qrUrl;
       });
 
-      // Exportar
       const link = document.createElement('a');
       link.download = `Poster_${textoQR.replace(/\s+/g, '_')}.png`;
       link.href = canvas.toDataURL('image/png', 1.0);
