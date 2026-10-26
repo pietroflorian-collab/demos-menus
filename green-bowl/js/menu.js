@@ -93,14 +93,23 @@ const GreenBowlMenu = {
     }
   },
 
-  updateUI() {
+    updateUI() {
     const list = this.getSelection(); 
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");
     
     if (totalCount > 0 && fabContainer) { 
       fabContainer.classList.remove("hidden"); 
-      document.getElementById("fab-badge").innerText = totalCount; 
+      
+      let totalPrecio = 0;
+      list.forEach(item => {
+        const platoInfo = this.allItems.find(p => p.id === item.id);
+        if(platoInfo) totalPrecio += (platoInfo.precio * item.cantidad);
+      });
+
+      document.getElementById("cart-item-count").innerText = `Mi Pedido (${totalCount})`;
+      document.getElementById("cart-total-price").innerText = `$${totalPrecio.toLocaleString('es-CO')}`;
+      
     } else if (fabContainer) { 
       fabContainer.classList.add("hidden"); 
       this.closeModal(); 
@@ -110,21 +119,21 @@ const GreenBowlMenu = {
     if (!modalList) return;
     
     if (list.length === 0) {
-      modalList.innerHTML = `<div class="text-center py-8"><span class="material-symbols-outlined text-gray-300 text-5xl mb-2">shopping_cart</span><p class="text-gray-500">Tu lista está vacía.</p></div>`;
+      modalList.innerHTML = `<div class="text-center py-8"><p class="text-gray-500 italic">La comanda está vacía.</p></div>`;
     } else {
       modalList.innerHTML = list.map(item => {
         const platoInfo = this.allItems.find(p => p.id === item.id);
         const precio = platoInfo ? platoInfo.precio : 0;
         return `
-          <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center justify-between border-b border-[#ddc0bf] pb-3">
             <div class="flex flex-col">
-              <span class="font-semibold text-gray-800">${escapeHTML(item.nombre)}</span>
-              <span class="text-sm text-gray-500">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
+              <span class="font-display font-bold text-gray-900">${escapeHTML(item.nombre)}</span>
+              <span class="text-sm text-gray-700">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
             </div>
-            <div class="flex items-center gap-3 bg-gray-100 rounded-lg px-2 py-1">
-              <button data-action="decrease" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">-</button>
-              <span class="text-sm font-semibold w-4 text-center">${item.cantidad}</span>
-              <button data-action="increase" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">+</button>
+            <div class="flex items-center gap-3 border border-gray-400 px-2 py-1">
+              <button data-action="decrease" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">-</button>
+              <span class="text-sm font-semibold w-4 text-center text-gray-900">${item.cantidad}</span>
+              <button data-action="increase" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">+</button>
             </div>
           </div>
         `;
