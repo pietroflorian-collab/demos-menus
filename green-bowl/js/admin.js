@@ -17,6 +17,8 @@ const SukidesuAdmin = {
     ImageUploader.init();
     this.loadAdminData(); 
     this.enableDragScroll("admin-category-bar"); 
+    document.title = `Admin - ${AppConfig.cliente.nombre}`;
+    document.getElementById('admin-sidebar-title').innerText = `Gestión de ${AppConfig.cliente.nombre}`;
   },
 
   bindEvents() {

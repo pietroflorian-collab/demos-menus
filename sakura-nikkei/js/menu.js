@@ -1,5 +1,6 @@
 ﻿﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
 import { UI } from './ui.js';
+import { AppConfig } from './config.js';
 
 const SukidesuMenu = {
   allItems: [], categoriesList: [], config: {}, selectedCategory: "", STORAGE_KEY: "sukidesu_order_selection",
@@ -125,6 +126,11 @@ const SukidesuMenu = {
 
     document.getElementById("loading-spinner")?.classList.add("hidden");
     document.getElementById("menu-grid")?.classList.remove("hidden");
+    document.title = `${AppConfig.cliente.nombre} - Menú`;
+    document.getElementById('brand-title').innerText = AppConfig.cliente.nombre;
+    document.getElementById('brand-slogan').innerText = AppConfig.cliente.eslogan;
+    document.getElementById('brand-desc').innerText = AppConfig.cliente.descripcionComercial;
+    document.getElementById('modal-cart-title').innerText = "Tu Pedido"; // Esto podría venir del config también
     this.setupCategoryFilter();
     this.renderMenu();
     this.updateUI();
