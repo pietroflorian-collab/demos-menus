@@ -63,7 +63,7 @@ const TrattoriaMenu = {
     }
   },
 
-   updateUI() {
+     updateUI() {
     const list = this.getSelection(); 
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");

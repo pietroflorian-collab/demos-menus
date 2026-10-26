@@ -16,7 +16,7 @@
       theme: {
         extend: {
           colors: {
-            primary: '#6c131c', secondary: '#635e55', surface: '#fef8f3',
+            primary: '#6c131c',  'primary-container': '#8b2b30', secondary: '#635e55', surface: '#fef8f3',
             'surface-container': '#f3ede8', 'surface-container-low': '#f8f3ee',
             'on-surface': '#1d1b19', 'on-surface-variant': '#564241',
             'outline-variant': '#ddc0bf'
@@ -113,8 +113,7 @@
 
   <!-- MODAL DEL CARRITO -->
   <div id="order-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity">
-    <div class="bg-[#fef8f3] border border-[#ddc0bf] w-full max-w-md flex flex-col max-h-[85vh] shadow-2xl transform scale-95 transition-transform" id="modal-content">
-      
+    <div class="bg-[#fef8f3] text-gray-900 border border-[#ddc0bf] w-full max-w-md flex flex-col max-h-[85vh] shadow-2xl transform scale-95 transition-transform" id="modal-content">  
       <div class="p-6 border-b border-[#ddc0bf] flex justify-between items-center">
         <h3 class="font-display text-2xl text-primary italic">Tu Comanda</h3>
         <button id="btn-close-cart" class="text-gray-500 hover:text-black">
