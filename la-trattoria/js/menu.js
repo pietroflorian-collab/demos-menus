@@ -63,7 +63,7 @@ const TrattoriaMenu = {
     }
   },
 
-  updateUI() {
+   updateUI() {
     const list = this.getSelection(); 
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");
@@ -98,12 +98,12 @@ const TrattoriaMenu = {
           <div class="flex items-center justify-between border-b border-[#ddc0bf] pb-3">
             <div class="flex flex-col">
               <span class="font-display font-bold text-gray-900">${escapeHTML(item.nombre)}</span>
-              <span class="text-sm text-gray-600">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
+              <span class="text-sm text-gray-700">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
             </div>
-            <div class="flex items-center gap-3 border border-gray-300 px-2 py-1">
-              <button data-action="decrease" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">-</button>
-              <span class="text-sm font-semibold w-4 text-center">${item.cantidad}</span>
-              <button data-action="increase" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">+</button>
+            <div class="flex items-center gap-3 border border-gray-400 px-2 py-1">
+              <button data-action="decrease" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">-</button>
+              <span class="text-sm font-semibold w-4 text-center text-gray-900">${item.cantidad}</span>
+              <button data-action="increase" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">+</button>
             </div>
           </div>
         `;
