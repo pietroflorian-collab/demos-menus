@@ -1,36 +1,39 @@
 ﻿export const datosEstablecimiento = {
-    nombre: "Green Bowl",
-    correoPQR: "hola@greenbowl.com",
-    desarrollador: "Pietro Florian Galea",
-    whatsappDev: "+573025303152",
+    nombre: "LA TRATTORIA",
+    correoPQR: "hola@latrattoria.com",
+    desarrollador: "Tu Agencia de Desarrollo",
+    whatsappDev: "+573000000000",
     urlSIC: "https://www.sic.gov.co/"
 };
 
 export const footerHTML = `
-<footer class="bg-white text-gray-500 font-sans mt-auto border-t border-gray-200">
-  <div class="flex flex-col md:flex-row flex-wrap justify-between items-start px-5 md:px-12 py-8 max-w-7xl mx-auto gap-8">
-
-    <div class="flex flex-col mb-4 md:mb-0 w-full md:w-auto">
-      <div class="text-xl font-bold text-gray-900 mb-2">${datosEstablecimiento.nombre}</div>
-      <div class="text-sm">© 2026 ${datosEstablecimiento.nombre}. Todos los Derechos Reservados.</div>
+<footer class="w-full bg-[#F4F1EA] border-t border-[#D6CDBF]">
+  <div class="max-w-[1040px] mx-auto px-6 py-12">
+    <div class="border-t border-b border-[#D6CDBF] py-8 my-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div class="space-y-2">
+          <p class="text-xs uppercase text-primary tracking-[0.15em] font-bold">Ubicación</p>
+          <p class="text-sm text-gray-800">${datosEstablecimiento.nombre}</p>
+          <p class="text-xs text-gray-600">${datosEstablecimiento.correoPQR}</p>
+        </div>
+        <div class="space-y-2 text-center">
+          <p class="font-display text-lg text-gray-900 uppercase tracking-[0.15em]">${datosEstablecimiento.nombre}</p>
+          <p class="text-xs text-gray-600 italic max-w-xs mx-auto leading-relaxed">“Cucina di memoria, olio toscano frantoio a freddo e rispetto devoto per la stagionalità.”</p>
+        </div>
+        <div class="space-y-2 md:text-right">
+          <p class="text-xs uppercase text-primary tracking-[0.15em] font-bold">Atención al Cliente</p>
+          <a href="mailto:${datosEstablecimiento.correoPQR}" class="text-sm text-gray-800 hover:text-primary transition-colors block">${datosEstablecimiento.correoPQR}</a>
+        </div>
+      </div>
     </div>
-
-    <div class="flex flex-col w-full md:w-auto">
-      <h4 class="text-sm font-bold text-gray-900 mb-3">Atención al Cliente</h4>
-      <a href="mailto:${datosEstablecimiento.correoPQR}" class="text-sm hover:text-blue-600 transition-colors mb-1">${datosEstablecimiento.correoPQR}</a>
-      <span class="text-xs mt-1">Respuesta PQR: máx. 15 días hábiles</span>
+    <div class="pt-4 flex flex-col md:flex-row items-center justify-between text-gray-500 text-[11px] uppercase tracking-[0.12em] gap-4">
+      <p>© ${new Date().getFullYear()} ${datosEstablecimiento.nombre}. Todos los derechos reservados.</p>
+      <div class="flex items-center gap-4">
+        <a href="terminos.html" class="hover:text-primary transition-colors">Términos y Condiciones</a>
+        <span class="text-[#D6CDBF]">|</span>
+        <a href="privacidad.html" class="hover:text-primary transition-colors">Política de Privacidad</a>
+      </div>
     </div>
-
-    <div class="flex flex-col w-full md:w-auto">
-      <h4 class="text-sm font-bold text-gray-900 mb-3">Información Legal</h4>
-      <a href="terminos.html" class="text-sm hover:text-blue-600 transition-colors mb-2">Términos y Condiciones</a>
-      <a href="privacidad.html" class="text-sm hover:text-blue-600 transition-colors mb-2">Política de Privacidad</a>
-      <a href="${datosEstablecimiento.urlSIC}" target="_blank" rel="noopener noreferrer" class="text-sm hover:text-blue-600 transition-colors">Superintendencia (SIC)</a>
-    </div>
-  </div>
-
-  <div class="border-t border-gray-200 py-4 text-center text-xs text-gray-400 px-5">
-    Desarrollado por ${datosEstablecimiento.desarrollador} | <a href="https://wa.me/${datosEstablecimiento.whatsappDev}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 underline transition-colors">WhatsApp: ${datosEstablecimiento.whatsappDev}</a>
   </div>
 </footer>
 `;

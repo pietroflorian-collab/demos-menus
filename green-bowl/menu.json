@@ -41,15 +41,15 @@
     { "id": "c1", "nombre": "Signature Bowls", "es_pausada": false },
     { "id": "c2", "nombre": "Jugos Fríos", "es_pausada": false }
   ],
-  "config": { "promo_activa": "false" },
+   "config": { "promo_activa": "false" },
   "tema": { 
-    "colorPrimario": "#0071E3", 
-    "colorFondo": "#FFFFFF", 
-    "colorTexto": "#1D1D1F", 
-    "colorTextoSuave": "#86868B", 
-    "colorBordes": "#E5E5E7", 
-    "radioBordes": "12", 
-    "fuenteHeroEslogan": "Inter", 
-    "fuentePlatoNombre": "Inter" 
+    "colorPrimario": "#6c131c", 
+    "colorFondo": "#fef8f3", 
+    "colorTexto": "#1d1b19", 
+    "colorTextoSuave": "#635e55", 
+    "colorBordes": "#ddc0bf", 
+    "radioBordes": "0", 
+    "fuenteHeroEslogan": "Playfair Display", 
+    "fuentePlatoNombre": "Playfair Display" 
   }
 }
