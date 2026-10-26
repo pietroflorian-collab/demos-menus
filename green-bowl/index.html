@@ -105,6 +105,29 @@
       </div>
     </div>
   </div>
+  <!-- ... (tu modal de la lista termina aquí) ... -->
+  </div>
+
+  <!-- AGREGA ESTAS LÍNEAS AQUÍ -->
+  <div id="footer-container"></div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('admin') === 'true') {
+        const backBtn = document.createElement('a');
+        backBtn.href = 'admin.html';
+        backBtn.className = 'fixed bottom-6 left-6 z-[100] bg-surface-container-high text-primary font-bold px-4 py-3 rounded-full shadow-2xl border border-gray-200 flex items-center gap-2 hover:bg-gray-100 transition-all active:scale-95';
+        backBtn.innerHTML = '<span class="material-symbols-outlined text-xl pointer-events-none">arrow_back</span><span class="pointer-events-none">Volver al Gestor</span>';
+        document.body.appendChild(backBtn);
+      }
+    });
+  </script>
+
+  <script type="module">
+    import { footerHTML } from './js/configFooter.js';
+    document.getElementById('footer-container').innerHTML = footerHTML;
+  </script>
 
   <script type="module" src="js/api.js"></script>
   <script type="module" src="js/ui-minimal.js"></script>
