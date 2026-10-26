@@ -1,10 +1,11 @@
-﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
+﻿import { db, MenuAPI, escapeHTML, showToast } from './api.js';
 import { UI } from './ui.js';
 import { AuthManager } from './auth.js';
 import { QRGenerator } from './qr.js';
 import { ImageUploader } from './image-uploader.js';
+import { doc, getDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-const SukidesuAdmin = {
+const MenuAdmin = {
   adminItems: [], 
   adminCategories: [], 
   adminConfig: {}, 
@@ -24,11 +25,12 @@ const SukidesuAdmin = {
     
     bindClick("nav-publish-btn", () => this.handlePublishMenu());
     bindClick("mobile-publish-btn", () => this.handlePublishMenu());
+
     bindClick("nav-promo-btn", () => this.openPromoModal()); 
     bindClick("nav-qr-btn", () => this.openQRModal()); 
     bindClick("nav-add-btn", () => this.openModal());
     bindClick("nav-cat-btn", () => this.openCategoryModal()); 
-    bindClick("nav-emp-btn", () => this.showDemoToast()); 
+    bindClick("nav-emp-btn", () => this.openEmployeeModal()); 
     bindClick("nav-logout-btn", () => AuthManager.logout()); 
     
     const closeMobileMenu = () => document.getElementById('mobile-menu-overlay')?.classList.add('hidden');
@@ -36,16 +38,18 @@ const SukidesuAdmin = {
     bindClick("mobile-cat-btn", () => { closeMobileMenu(); this.openCategoryModal(); });
     bindClick("mobile-promo-btn", () => { closeMobileMenu(); this.openPromoModal(); });
     bindClick("mobile-qr-btn", () => { closeMobileMenu(); this.openQRModal(); });
-    bindClick("mobile-emp-btn", () => { closeMobileMenu(); this.showDemoToast(); });
+    bindClick("mobile-emp-btn", () => { closeMobileMenu(); this.openEmployeeModal(); });
     bindClick("mobile-logout-btn", () => AuthManager.logout());
     
     bindClick("close-promo-btn", () => this.closeModalHelper("promoConfigModal")); 
     bindClick("close-cat-btn", () => this.closeModalHelper("categoryModal")); 
     bindClick("close-item-btn", () => this.closeModalHelper("itemModal"));
     bindClick("cancel-item-btn", () => this.closeModalHelper("itemModal")); 
+    bindClick("close-emp-btn", () => this.closeModalHelper("employeeModal"));
     bindClick("close-qr-btn", () => this.closeModalHelper("qrModal"));
     bindClick("cancel-confirm-btn", () => this.closeConfirmDialog()); 
     bindClick("execute-confirm-btn", () => this.executeConfirmAction());
+    
     bindClick("promo-save-btn", () => this.savePromoConfig()); 
     
     bindClick("confirm-crop-btn", () => {
@@ -58,6 +62,7 @@ const SukidesuAdmin = {
     document.getElementById("admin-search-input")?.addEventListener('input', (e) => this.handleSearch(e.target.value));
     document.getElementById("itemForm")?.addEventListener('submit', (e) => this.handleFormSubmit(e));
     document.getElementById("catForm")?.addEventListener('submit', (e) => this.handleCreateCategorySubmit(e));
+    document.getElementById("empForm")?.addEventListener('submit', (e) => this.handleEmpSubmit(e));
     
     ['item-nombre', 'item-precio', 'item-categoria', 'item-descripcion', 'item-promo-texto'].forEach(id => { 
       document.getElementById(id)?.addEventListener('input', () => this.updateModalPreview()); 
@@ -91,16 +96,21 @@ const SukidesuAdmin = {
       if (btn.dataset.action === 'toggle-cat') this.toggleCategoryPause(btn.dataset.id, btn.dataset.state === 'true');
       if (btn.dataset.action === 'delete-cat') this.deleteCategory(btn.dataset.id);
     });
-  },
-
-  showDemoToast() {
-    showToast("La gestión de personal no está disponible en el modo Demo.", "info");
+    
+    document.getElementById("employee-list")?.addEventListener('click', (e) => { 
+      const btn = e.target.closest('button[data-action="delete-emp"]'); 
+      if (btn) this.revokeEmployee(btn.dataset.id); 
+    });
   },
 
   async handlePublishMenu() {
+    const config = await MenuAPI.getDeployConfig();
+    const usados = config.despliegues_usados || 0;
+    const restantes = 500 - usados;
+
     this.showConfirmDialog(
       "Publicar Menú en Vivo", 
-      `¡Estás en Modo Demo!\n\nEn el sistema real, aquí se publicarían los cambios a tu página web. ¿Quieres simular la publicación?`, 
+      `¿Estás seguro de que ya realizaste TODOS los cambios necesarios en el menú?\n\nTe quedan ${restantes} actualizaciones en vivo este mes.\nAprovecha para agrupar los cambios antes de publicar.`, 
       async () => {
         const pcBtn = document.getElementById("nav-publish-btn");
         const mobBtn = document.getElementById("mobile-publish-btn");
@@ -110,12 +120,18 @@ const SukidesuAdmin = {
           if (pcBtn) { pcBtn.innerHTML = `<span class="material-symbols-outlined mr-2 text-base animate-spin">sync</span> Publicando...`; pcBtn.disabled = true; }
           if (mobBtn) { mobBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">sync</span>`; mobBtn.disabled = true; }
 
-          await MenuAPI.publishMenuJSON();
+          const secretSnap = await getDoc(doc(db, "sistema", "secretos"));
+          if (!secretSnap.exists()) throw new Error("Token de acceso no encontrado.");
           
-          document.getElementById("pending-changes-banner")?.classList.add("hidden");
-          if (this.adminConfig) this.adminConfig.cambios_pendientes = false;
-          showToast("¡Publicación simulada con éxito!", "success");
+          const res = await MenuAPI.publishMenuJSON(secretSnap.data().token_github);
+          
+          if (res && res.status === 'success') {
+            document.getElementById("pending-changes-banner")?.classList.add("hidden");
+            if (this.adminConfig) this.adminConfig.cambios_pendientes = false;
+            showToast("¡Menú publicado en vivo exitosamente!", "success");
+          }
         } catch (error) {
+          console.error("Error en publicación:", error);
           showToast(`Error: ${error.message}`, "error");
         } finally {
           if (pcBtn) { pcBtn.innerHTML = originalPcText; pcBtn.disabled = false; }
@@ -130,11 +146,24 @@ const SukidesuAdmin = {
     if (!slider) return; 
     let isDown = false, startX, scrollLeft;
     
-    slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+    slider.addEventListener('mousedown', (e) => { 
+      isDown = true; 
+      startX = e.pageX - slider.offsetLeft; 
+      scrollLeft = slider.scrollLeft; 
+    });
     slider.addEventListener('mouseleave', () => isDown = false); 
     slider.addEventListener('mouseup', () => isDown = false);
-    slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft) - startX) * 2; });
-    slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } }, { passive: false });
+    slider.addEventListener('mousemove', (e) => { 
+      if (!isDown) return; 
+      e.preventDefault(); 
+      slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft) - startX) * 2; 
+    });
+    slider.addEventListener('wheel', (e) => { 
+      if (e.deltaY !== 0) { 
+        e.preventDefault(); 
+        slider.scrollLeft += e.deltaY; 
+      } 
+    }, { passive: false });
   },
 
   async loadAdminData() {
@@ -144,6 +173,11 @@ const SukidesuAdmin = {
     const res = await MenuAPI.fetchItems(true); 
     this.adminItems = res.items || []; 
     this.adminCategories = res.categories || []; 
+    if (this.adminConfig.cambios_pendientes === true) {
+      document.getElementById("pending-changes-banner")?.classList.remove("hidden");
+    } else {
+      document.getElementById("pending-changes-banner")?.classList.add("hidden");
+    }
     
     document.getElementById("admin-loading").classList.add("hidden"); 
     document.getElementById("admin-grid").classList.remove("hidden");
@@ -153,8 +187,13 @@ const SukidesuAdmin = {
     this.renderAdminGrid();
   },
 
-  openModalHelper(id) { document.getElementById(id)?.classList.replace("hidden", "flex"); },
-  closeModalHelper(id) { document.getElementById(id)?.classList.replace("flex", "hidden"); },
+  openModalHelper(id) { 
+    document.getElementById(id)?.classList.replace("hidden", "flex"); 
+  },
+  
+  closeModalHelper(id) { 
+    document.getElementById(id)?.classList.replace("flex", "hidden"); 
+  },
 
   showConfirmDialog(title, message, action) {
     document.getElementById('confirm-title').innerText = title; 
@@ -163,12 +202,95 @@ const SukidesuAdmin = {
     this.openModalHelper('confirmModal');
   },
   
-  closeConfirmDialog() { this.closeModalHelper('confirmModal'); this.pendingConfirmAction = null; },
-  executeConfirmAction() { this.closeModalHelper('confirmModal'); if (this.pendingConfirmAction) { this.pendingConfirmAction(); this.pendingConfirmAction = null; } },
+  closeConfirmDialog() { 
+    this.closeModalHelper('confirmModal'); 
+    this.pendingConfirmAction = null; 
+  },
+  
+  executeConfirmAction() { 
+    this.closeModalHelper('confirmModal'); 
+    if (this.pendingConfirmAction) { 
+      this.pendingConfirmAction(); 
+      this.pendingConfirmAction = null; 
+    } 
+  },
+
+  async openEmployeeModal() { 
+    if (AuthManager.userRole === 'editor') { 
+      showToast("Acceso denegado. Solo administradores.", "error"); 
+      return; 
+    } 
+    this.openModalHelper("employeeModal"); 
+    this.loadEmployees(); 
+  },
+
+  async loadEmployees() {
+    const listContainer = document.getElementById("employee-list"); 
+    listContainer.innerHTML = `<span class="text-secondary text-sm">Cargando personal...</span>`;
+    
+    try {
+      const snap = await getDocs(collection(db, 'usuarios')); 
+      const html = [];
+      
+      snap.forEach(docSnap => {
+        const data = docSnap.data(); 
+        
+        html.push(`
+          <div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border border-outline-30">
+            <div>
+              <p class="font-label-bold text-sm text-on-surface">${escapeHTML(data.email || 'Sin correo registrado')}</p>
+              <p class="text-xs text-primary uppercase">${escapeHTML(data.rol)}</p>
+            </div>
+            <button data-action="delete-emp" data-id="${docSnap.id}" class="p-2 text-error hover:bg-error/10 rounded transition-colors" title="Revocar Acceso">
+              <span class="material-symbols-outlined pointer-events-none text-xl">person_remove</span>
+            </button>
+          </div>
+        `);
+      });
+      
+      listContainer.innerHTML = html.length > 0 ? html.join("") : `<span class="text-secondary text-sm">No hay empleados registrados.</span>`;
+    } catch (error) { 
+      listContainer.innerHTML = `<span class="text-error text-sm">Error al cargar personal.</span>`; 
+    }
+  },
+
+  async handleEmpSubmit(e) {
+    e.preventDefault(); 
+    const btn = document.getElementById("submit-emp-btn"); 
+    btn.disabled = true; 
+    btn.innerText = "Procesando...";
+    
+    const success = await AuthManager.registrarEmpleado(
+      document.getElementById("emp-email").value.trim(), 
+      document.getElementById("emp-pass").value.trim(), 
+      document.getElementById("emp-rol").value
+    );
+    
+    if(success) { 
+      document.getElementById("empForm").reset(); 
+      this.loadEmployees(); 
+    } 
+    
+    btn.disabled = false; 
+    btn.innerText = "Crear Empleado";
+  },
+
+  async revokeEmployee(uid) {
+    this.showConfirmDialog("Revocar Acceso", "¿Estás seguro de revocar permanentemente el acceso a este empleado? No podrá volver a ingresar al sistema.", async () => {
+      try { 
+        await deleteDoc(doc(db, 'usuarios', uid)); 
+        showToast("Acceso revocado", "success"); 
+        this.loadEmployees(); 
+      } catch (error) { 
+        showToast("Error al revocar acceso", "error"); 
+      }
+    });
+  },
 
   openPromoModal() {
     document.getElementById("config-promo-file").value = "";
     ImageUploader.pendingPromoImageBase64 = null;
+    
     document.getElementById("config-promo-activa").checked = String(this.adminConfig.promo_activa).toLowerCase() === "true"; 
     document.getElementById("config-promo-texto").value = this.adminConfig.promo_texto || "";
     document.getElementById("config-promo-img").value = this.adminConfig.promo_imagen || ""; 
@@ -182,7 +304,13 @@ const SukidesuAdmin = {
     document.getElementById("admin-preview-promo-texto").innerText = texto; 
     const imgEl = document.getElementById("admin-preview-promo-img");
     
-    if (url) { imgEl.src = url; imgEl.classList.remove("hidden"); } else { imgEl.src = ""; imgEl.classList.add("hidden"); }
+    if (url) { 
+      imgEl.src = url; 
+      imgEl.classList.remove("hidden"); 
+    } else { 
+      imgEl.src = ""; 
+      imgEl.classList.add("hidden"); 
+    }
   },
   
   async savePromoConfig() {
@@ -192,11 +320,13 @@ const SukidesuAdmin = {
     
     try {
       let finalImageUrl = document.getElementById("config-promo-img").value;
+      
       if (ImageUploader.pendingPromoImageBase64) {
-        btn.innerText = "Procesando imagen..."; 
+        btn.innerText = "Subiendo imagen..."; 
         finalImageUrl = await ImageUploader.uploadToGitHub(ImageUploader.pendingPromoImageBase64, true);
       }
 
+      btn.innerText = "Guardando datos..."; 
       const payload = { 
         promo_activa: document.getElementById("config-promo-activa").checked.toString(), 
         promo_texto: document.getElementById("config-promo-texto").value, 
@@ -206,44 +336,76 @@ const SukidesuAdmin = {
       const res = await MenuAPI.updateConfig(payload); 
       if(res && res.status === "success") { 
         showToast("Anuncio guardado", "success"); 
+        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         this.adminConfig = payload; 
         this.closeModalHelper("promoConfigModal"); 
+      } else { 
+        throw new Error(res?.message || "Error al guardar"); 
       } 
-    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
-    finally { btn.innerText = "Guardar Anuncio"; btn.disabled = false; }
+    } catch (error) { 
+      showToast(`Error: ${error.message}`, "error"); 
+    } finally { 
+      btn.innerText = "Guardar Anuncio"; 
+      btn.disabled = false; 
+    }
   },
 
-  openQRModal() { this.openModalHelper("qrModal"); QRGenerator.init(); QRGenerator.update(); },
+  openQRModal() { 
+    this.openModalHelper("qrModal"); 
+    QRGenerator.init();
+    QRGenerator.update();
+  },
 
   populateCategorySelect() { 
-    const categoriasReales = this.adminCategories.filter(cat => { const name = (cat.nombre || "").toLowerCase(); return name !== "combos y promo" && name !== "combos y promos"; }); 
-    document.getElementById("item-categoria").innerHTML = categoriasReales.map(cat => `<option value="${escapeHTML(cat.nombre)}">${escapeHTML(cat.nombre)}</option>`).join(""); 
+    const categoriasReales = this.adminCategories.filter(cat => { 
+      const name = (cat.nombre || "").toLowerCase(); 
+      return name !== "combos y promo" && name !== "combos y promos"; 
+    }); 
+    document.getElementById("item-categoria").innerHTML = categoriasReales.map(cat => `<option value="${escapeHTML(cat.nombre)}" class="bg-surface-container-high text-on-surface">${escapeHTML(cat.nombre)}</option>`).join(""); 
   },
   
   setupAdminCategories() {
     if (this.adminCategories.length === 0) return;
-    let categoriasVisibles = this.adminCategories.filter(c => { const name = (c.nombre || "").toLowerCase(); return !name.includes("combo") && !name.includes("promo"); }); 
+    
+    let categoriasVisibles = this.adminCategories.filter(c => { 
+      const name = (c.nombre || "").toLowerCase(); 
+      return !name.includes("combo") && !name.includes("promo"); 
+    }); 
     categoriasVisibles.push({ nombre: "Combos y Promo", es_pausada: false });
     
     if (!this.selectedCategory || !categoriasVisibles.some(c => c.nombre === this.selectedCategory)) {
       this.selectedCategory = categoriasVisibles[0].nombre;
     }
-    document.getElementById("admin-category-bar").innerHTML = categoriasVisibles.map(cat => `<button data-category="${escapeHTML(cat.nombre)}" class="w-44 h-11 px-3 py-2 rounded-full font-label-bold text-sm shrink-0 transition-all ${cat.es_pausada ? 'opacity-50 grayscale border-dashed' : ''} ${this.selectedCategory === cat.nombre ? 'bg-primary text-sushi-white' : 'bg-surface-container-highest text-tertiary hover:bg-surface-bright'}">${escapeHTML(cat.nombre)}</button>`).join("");
+    
+    document.getElementById("admin-category-bar").innerHTML = categoriasVisibles.map(cat => `<button data-category="${escapeHTML(cat.nombre)}" class="w-44 h-11 px-3 py-2 rounded-full font-label-bold text-sm shrink-0 transition-all ${cat.es_pausada ? 'opacity-50 grayscale border-dashed' : ''} ${this.selectedCategory === cat.nombre ? 'bg-primary text-sushi-white' : 'bg-surface-container-highest text-tertiary hover:bg-surface-bright'}">${escapeHTML(cat.nombre)} ${cat.es_pausada ? '⏸' : ''}</button>`).join("");
   },
   
-  filterAdminCategory(cat) { this.selectedCategory = cat; this.setupAdminCategories(); this.renderAdminGrid(); }, 
-  handleSearch(query) { this.searchQuery = query.toLowerCase().trim(); this.renderAdminGrid(); },
+  filterAdminCategory(cat) { 
+    this.selectedCategory = cat; 
+    this.setupAdminCategories(); 
+    this.renderAdminGrid(); 
+  }, 
+  
+  handleSearch(query) { 
+    this.searchQuery = query.toLowerCase().trim(); 
+    this.renderAdminGrid(); 
+  },
 
   renderAdminGrid() {
     const grid = document.getElementById("admin-grid");
+    
     const filtered = this.adminItems.filter(i => { 
       const safeName = i.nombre || ""; 
       const matchesSearch = !this.searchQuery || safeName.toLowerCase().includes(this.searchQuery); 
       let matchesCategory = false; 
+      
       if (this.selectedCategory === "Combos y Promo") { 
         const cat = (i.categoria || "").toLowerCase(); 
         matchesCategory = (cat === "combos" || cat === "promociones" || cat === "promos" || cat === "promo" || (i.dias_promo && i.dias_promo.trim() !== "")); 
-      } else { matchesCategory = this.searchQuery ? true : (i.categoria === this.selectedCategory); } 
+      } else { 
+        matchesCategory = this.searchQuery ? true : (i.categoria === this.selectedCategory); 
+      } 
+      
       return matchesSearch && matchesCategory; 
     });
     
@@ -252,7 +414,10 @@ const SukidesuAdmin = {
     document.getElementById("btn-add-grid")?.addEventListener('click', () => this.openModal());
   },
 
-  openCategoryModal() { this.renderCategoryManageList(); this.openModalHelper("categoryModal"); },
+  openCategoryModal() { 
+    this.renderCategoryManageList(); 
+    this.openModalHelper("categoryModal"); 
+  },
   
   renderCategoryManageList() {
     document.getElementById("category-manage-list").innerHTML = this.adminCategories.map(cat => `
@@ -269,32 +434,55 @@ const SukidesuAdmin = {
   async handleCreateCategorySubmit(e) {
     e.preventDefault(); 
     const btn = document.getElementById("add-cat-btn"); 
-    btn.disabled = true; btn.innerText = "Creando...";
+    btn.disabled = true; 
+    btn.innerText = "Creando...";
+    
     try { 
       const res = await MenuAPI.createCategory({ nombre: document.getElementById("new-cat-name").value.trim() }); 
       if (res && res.status === "success") { 
         document.getElementById("new-cat-name").value = ""; 
         showToast("Categoría creada", "success"); 
+        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         await this.loadAdminData(); 
         this.renderCategoryManageList(); 
+      } else { 
+        throw new Error(res?.message || "Rechazado por la BD."); 
       } 
-    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
-    finally { btn.disabled = false; btn.innerText = "+ Crear"; }
+    } catch (error) { 
+      showToast(`Error: ${error.message}`, "error"); 
+    } finally { 
+      btn.disabled = false; 
+      btn.innerText = "+ Crear"; 
+    }
   },
   
   async toggleCategoryPause(id, esPausada) { 
-    try { await MenuAPI.updateCategory({ id: id, es_pausada: esPausada }); showToast("Estado actualizado", "info"); await this.loadAdminData(); this.renderCategoryManageList(); } 
-    catch (error) { showToast(`Error: ${error.message}`, "error"); } 
+    try { 
+      const res = await MenuAPI.updateCategory({ id: id, es_pausada: esPausada }); 
+      if (res && res.status === "success") { 
+        showToast("Estado actualizado", "info"); 
+        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
+        await this.loadAdminData(); 
+        this.renderCategoryManageList(); 
+      } 
+    } catch (error) { 
+      showToast(`Error: ${error.message}`, "error"); 
+    } 
   },
   
   async deleteCategory(id) {
-    this.showConfirmDialog("Eliminar Categoría", "Esta acción es irreversible y podría afectar los platos.", async () => {
+    this.showConfirmDialog("Eliminar Categoría", "Esta acción es irreversible y podría afectar los platos que tengan esta categoría asignada.", async () => {
       try { 
-        await MenuAPI.deleteCategory(id); 
-        showToast("Eliminada", "success"); 
-        await this.loadAdminData(); 
-        this.renderCategoryManageList(); 
-      } catch (error) { showToast(`Error: ${error.message}`, "error"); }
+        const res = await MenuAPI.deleteCategory(id); 
+        if (res && res.status === "success") { 
+          showToast("Eliminada", "success"); 
+          document.getElementById("pending-changes-banner")?.classList.remove("hidden");
+          await this.loadAdminData(); 
+          this.renderCategoryManageList(); 
+        } 
+      } catch (error) { 
+        showToast(`Error: ${error.message}`, "error"); 
+      }
     });
   },
 
@@ -316,12 +504,19 @@ const SukidesuAdmin = {
   async togglePausado(id) {
     const item = this.adminItems.find(i => i.id == id); 
     if (!item) return; 
+    
     item.es_pausado = !(String(item.es_pausado).toLowerCase() === "true");
     try { 
-      await MenuAPI.updateItem(item); 
-      showToast("Estado actualizado", "info"); 
-      this.renderAdminGrid(); 
-    } catch (error) { item.es_pausado = !item.es_pausado; showToast(`Error: ${error.message}`, "error"); }
+      const res = await MenuAPI.updateItem(item); 
+      if (res && res.status === "success") { 
+        showToast("Estado actualizado", "info"); 
+        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
+        this.renderAdminGrid(); 
+      } else throw new Error("Rechazado"); 
+    } catch (error) { 
+      item.es_pausado = !item.es_pausado; 
+      showToast(`Error al pausar: ${error.message}`, "error"); 
+    }
   },
   
   openModal(item = null) {
@@ -341,26 +536,41 @@ const SukidesuAdmin = {
       document.getElementById("item-picante").checked = String(item.es_picante).toLowerCase() === "true"; 
       document.getElementById("item-pausado").checked = String(item.es_pausado).toLowerCase() === "true"; 
       document.getElementById("item-promo-texto").value = item.texto_promo || ""; 
+      
       if (item.dias_promo) { 
         const activeDays = item.dias_promo.split(',').map(d => d.trim()); 
-        document.querySelectorAll('input[name="promo-dia"]').forEach(cb => { if (activeDays.includes(cb.value)) cb.checked = true; }); 
+        document.querySelectorAll('input[name="promo-dia"]').forEach(cb => { 
+          if (activeDays.includes(cb.value)) cb.checked = true; 
+        }); 
       }
-    } else { document.getElementById("item-imagen-url").value = ""; } 
+    } else { 
+      document.getElementById("item-imagen-url").value = ""; 
+    } 
+    
     this.updateModalPreview(); 
     this.openModalHelper("itemModal");
   },
   
-  editItem(id) { const item = this.adminItems.find(i => i.id == id); if (item) this.openModal(item); },
+  editItem(id) { 
+    const item = this.adminItems.find(i => i.id == id); 
+    if (item) this.openModal(item); 
+  },
   
   async deleteItem(id) { 
-    this.showConfirmDialog("Eliminar Plato", "¿Estás seguro? El plato desaparecerá de la demo.", async () => {
+    this.showConfirmDialog("Eliminar Plato", "¿Estás seguro? Esta acción borrará el plato de la base de datos.", async () => {
       try { 
         const res = await MenuAPI.deleteItem(id); 
         if (res && res.status === "success") { 
           showToast("Plato eliminado", "success"); 
+          document.getElementById("pending-changes-banner")?.classList.remove("hidden");
           await this.loadAdminData(); 
-        } 
-      } catch (error) { showToast(`Error: ${error.message}`, "error"); }
+        } else { 
+          throw new Error("No se pudo borrar el documento."); 
+        }
+      } catch (error) { 
+        console.error("Error en deleteItem:", error); 
+        showToast(`Error: ${error.message}`, "error"); 
+      }
     });
   },
 
@@ -368,14 +578,29 @@ const SukidesuAdmin = {
     e.preventDefault(); 
     const btn = document.getElementById("submit-btn"); 
     btn.disabled = true; 
+    
     try {
       const nombreInput = document.getElementById("item-nombre").value.trim();
       const itemId = document.getElementById("item-id").value;
-      const esDuplicado = this.adminItems.some(item => item.nombre.toLowerCase() === nombreInput.toLowerCase() && item.id !== itemId);
-      if (esDuplicado) { showToast("Ya existe un plato con este nombre.", "error"); btn.disabled = false; return; }
+
+      const esDuplicado = this.adminItems.some(item => 
+        item.nombre.toLowerCase() === nombreInput.toLowerCase() && item.id !== itemId
+      );
+
+      if (esDuplicado) {
+        showToast("Ya existe un plato con este nombre.", "error");
+        btn.disabled = false;
+        return; 
+      }
 
       let finalImageUrl = document.getElementById("item-imagen-url").value;
-      if (ImageUploader.pendingImageBase64) { btn.innerText = "Procesando imagen..."; finalImageUrl = await ImageUploader.uploadToGitHub(ImageUploader.pendingImageBase64, false); }
+      
+      if (ImageUploader.pendingImageBase64) {
+        btn.innerText = "Subiendo imagen..."; 
+        finalImageUrl = await ImageUploader.uploadToGitHub(ImageUploader.pendingImageBase64, false); 
+      }
+      
+      btn.innerText = "Guardando datos...";
       
       const payload = {
         nombre: nombreInput, 
@@ -395,12 +620,20 @@ const SukidesuAdmin = {
       
       if (res && res.status === "success") { 
         showToast("Plato guardado con éxito", "success"); 
+        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         this.closeModalHelper("itemModal"); 
         await this.loadAdminData(); 
-      } 
-    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
-    finally { btn.disabled = false; btn.innerText = "Guardar Plato"; }
+      } else { 
+        throw new Error(res?.message || "Error en Firestore."); 
+      }
+    } catch (error) { 
+      console.error("Error al guardar:", error); 
+      showToast(`Error: ${error.message}`, "error"); 
+    } finally { 
+      btn.disabled = false; 
+      btn.innerText = "Guardar Plato"; 
+    }
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => AuthManager.init(() => SukidesuAdmin.init()));
+document.addEventListener("DOMContentLoaded", () => AuthManager.init(() => MenuAdmin.init()));

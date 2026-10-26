@@ -1,6 +1,6 @@
 export const QRGenerator = {
   qrCode: null,
-  defaultLogo: 'images/logo1.png',
+  defaultLogo: 'images/icon-192x192.png',
   uploadedLogo: null,
   isInitialized: false,
 
