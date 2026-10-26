@@ -73,13 +73,17 @@
     </section>
   </main>
 
-  <div id="fab-container" class="fixed bottom-8 right-8 z-40 hidden">
-    <button id="btn-open-cart" class="rounded-full px-6 py-3.5 shadow-xl flex items-center gap-3 bg-secondary text-white font-semibold transition-transform duration-200 hover:scale-105 active:scale-95">
-      <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-      <span>Ver mi lista</span>
-      <span id="fab-badge" class="w-6 h-6 rounded-full bg-white text-secondary font-bold text-xs flex items-center justify-center">0</span>
+  <!-- BOTÓN FLOTANTE (FAB) EDITORIAL -->
+  <aside id="fab-container" class="fixed bottom-6 right-6 z-40 hidden">
+    <button id="btn-open-cart" class="bg-[#8b2b30] text-white px-6 py-3 rounded-none border border-[#6c131c] flex items-center gap-4 hover:brightness-110 transition-all shadow-lg">
+      <span id="cart-item-count" class="font-display italic text-lg text-white">Mi Pedido (0)</span>
+      <div class="h-5 w-px bg-white/30"></div>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] uppercase tracking-wider opacity-80 text-white">Total</span>
+        <span id="cart-total-price" class="font-display font-bold text-lg text-white">$0</span>
+      </div>
     </button>
-  </div>
+  </aside>
 
   <div id="order-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity">
    <div class="bg-[#fef8f3] text-gray-900 border border-[#ddc0bf] w-full max-w-md flex flex-col max-h-[85vh] shadow-2xl transform scale-95 transition-transform" id="modal-content">
