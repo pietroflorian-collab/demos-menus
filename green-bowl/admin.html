@@ -85,7 +85,6 @@
       <!-- Menú de Navegación -->
       <div class="flex-1 px-2 overflow-y-auto flex flex-col gap-2 pb-4">
         
-        <!-- ACORDEÓN 1 -->
         <div class="flex flex-col shrink-0">
           <button onclick="document.getElementById('menu-sub').classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180');" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 rounded-xl text-left group transition-colors">
             <div class="flex items-center pointer-events-none">
@@ -104,7 +103,6 @@
           </div>
         </div>
 
-        <!-- ACORDEÓN 2 -->
         <div class="flex flex-col shrink-0">
           <button onclick="document.getElementById('marketing-sub').classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180');" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 rounded-xl text-left group transition-colors">
             <div class="flex items-center pointer-events-none">
@@ -123,7 +121,6 @@
           </div>
         </div>
 
-        <!-- ACORDEÓN 3 -->
         <div class="flex flex-col shrink-0">
           <button onclick="document.getElementById('admin-sub').classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180');" class="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 rounded-xl text-left group transition-colors">
             <div class="flex items-center pointer-events-none">
@@ -151,7 +148,6 @@
     <!-- ÁREA CENTRAL -->
     <main class="flex-1 ml-0 md:ml-64 flex flex-col relative z-10 min-w-0">
       
-      <!-- Barra Superior Móvil -->
       <div class="md:hidden flex flex-col z-30 shrink-0">
         <div class="flex justify-between items-center px-4 py-3 bg-white border-b border-gray-200">
           <div class="flex items-center gap-3">
@@ -166,7 +162,6 @@
         </div>
       </div>
 
-      <!-- HEADER (Escritorio) -->
       <header class="px-8 py-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shrink-0">
         <div>
           <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Tus Productos</h2>
@@ -180,15 +175,11 @@
         </div>
       </header>
 
-      <!-- GRILLA DE PRODUCTOS -->
       <div class="flex-1 md:overflow-y-auto px-8 pb-12 min-h-0 w-full">
-        <!-- Categorías -->
         <div id="admin-category-bar" class="scroll-container flex gap-2 mb-8 overflow-x-auto pb-2 flex-nowrap"></div>
-        
         <div id="admin-loading" class="text-center py-12 hidden">
           <span class="material-symbols-outlined text-[#005ab7] text-4xl animate-spin">progress_activity</span>
         </div>
-        
         <div id="admin-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </main>
@@ -277,8 +268,6 @@
         </form>
       </div>
     </div>
-
-    <!-- OTROS MODALES (Se asume que están limpios de Sukidesu y con el mismo estilo claro) -->
     
   </div>
 </body>
