@@ -5,22 +5,14 @@ export const UIMinimal = {
     const isPausado = String(item.es_pausado).toLowerCase() === "true";
     const isSelected = currentSelection.some(i => i.id === item.id);
     
-    // Estilos para el admin si el plato está pausado
     const adminStyles = rol === 'admin' && isPausado ? 'opacity-50 grayscale' : '';
     const precioFormatted = formatPrice(item.precio);
     
-    // Etiquetas
-    let tagHTML = '';
-    if (item.etiquetas && item.etiquetas.length > 0) {
-      tagHTML = `<span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-xs font-semibold text-gray-800 px-3 py-1 rounded-full shadow-sm">${escapeHTML(item.etiquetas[0])}</span>`;
-    } else if (item.texto_promo && rol !== 'admin') {
-      tagHTML = `<span class="absolute top-4 left-4 bg-[#005ab7]/90 backdrop-blur-md text-xs font-semibold text-white px-3 py-1 rounded-full shadow-sm">${escapeHTML(item.texto_promo)}</span>`;
-    }
-
-    // Imagen con fallback
+    // ELIMINAMOS LAS ETIQUETAS ABSOLUTAS (ÓVALOS)
+    // La categoría ahora se muestra abajo en texto azul.
+    
     const imgUrl = item.imagen_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400';
 
-    // Botones de acción según el Rol
     let actionBtn = '';
     if (rol === 'admin') {
       actionBtn = `
@@ -46,24 +38,32 @@ export const UIMinimal = {
     }
 
     return `
-      <article class="group ${adminStyles} bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+      <article class="group ${adminStyles} bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+        
+        <!-- Imagen Limpia, sin nada encima -->
         <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
           <img alt="${escapeHTML(item.nombre)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="${escapeHTML(imgUrl)}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400'"/>
-          ${tagHTML}
         </div>
-        <div class="p-5 flex flex-col flex-grow">
+        
+        <div class="p-5 flex flex-col flex-grow bg-white">
           <div class="flex-grow">
-            <h3 class="text-xl font-semibold text-gray-900 group-hover:text-[#005ab7] transition-colors line-clamp-1">
+            <!-- Categoría en texto limpio abajo -->
+            <div class="text-[11px] font-bold text-[#005ab7] uppercase tracking-widest mb-1.5">
+              ${escapeHTML(item.categoria || 'General')}
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 group-hover:text-[#005ab7] transition-colors line-clamp-1">
               ${escapeHTML(item.nombre)}
             </h3>
+            
             <p class="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-2">
               ${escapeHTML(item.descripcion || '')}
             </p>
           </div>
           
           ${rol === 'admin' ? actionBtn : `
-            <div class="flex items-center justify-between mt-6 pt-2">
-              <span class="text-lg font-bold text-gray-900">${precioFormatted}</span>
+            <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+              <span class="text-xl font-bold text-gray-900">${precioFormatted}</span>
               ${actionBtn}
             </div>
           `}

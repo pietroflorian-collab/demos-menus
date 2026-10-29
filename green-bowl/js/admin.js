@@ -1,8 +1,10 @@
 ﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
-import { UI } from './ui.js';
+import { UIMinimal } from './ui-minimal.js'; // <-- CAMBIADO
+import { AppConfig } from './config.js';    // <-- AGREGADO
 import { AuthManager } from './auth.js';
 import { QRGenerator } from './qr.js';
 import { ImageUploader } from './image-uploader.js';
+
 
 const SukidesuAdmin = {
   adminItems: [], 
@@ -249,7 +251,7 @@ const SukidesuAdmin = {
       return matchesSearch && matchesCategory; 
     });
     
-    const itemsHTML = filtered.map(item => UI.generarTarjetaPlato(item, 'admin')).join(""); 
+    const itemsHTML = filtered.map(item => UIMinimal.generarTarjetaPlato(item, 'admin')).join(""); 
     grid.innerHTML = itemsHTML + `<div id="btn-add-grid" class="rounded-xl border-2 border-dashed border-primary/40 hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center min-h-[240px] cursor-pointer group"><div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors"><span class="material-symbols-outlined text-3xl">add</span></div><span class="font-label-bold text-tertiary group-hover:text-primary">Añadir Nuevo</span></div>`;
     document.getElementById("btn-add-grid")?.addEventListener('click', () => this.openModal());
   },
@@ -312,7 +314,7 @@ const SukidesuAdmin = {
       texto_promo: document.getElementById("item-promo-texto").value.trim() 
     };
     const contenedor = document.getElementById("preview-container"); 
-    if (contenedor && typeof UI !== 'undefined') contenedor.innerHTML = UI.generarTarjetaPlato(itemEnVivo, 'preview');
+    if (contenedor && typeof UIMinimal !== 'undefined') contenedor.innerHTML = UIMinimal.generarTarjetaPlato(itemEnVivo, 'preview');
   },
   
   async togglePausado(id) {
