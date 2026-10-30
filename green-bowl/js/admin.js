@@ -20,7 +20,8 @@ const SukidesuAdmin = {
     this.loadAdminData(); 
     this.enableDragScroll("admin-category-bar"); 
     document.title = `Admin - ${AppConfig.cliente.nombre}`;
-    document.getElementById('admin-sidebar-title').innerText = `Gestión de ${AppConfig.cliente.nombre}`;
+    const titleEl = document.getElementById('admin-sidebar-title');
+if (titleEl) titleEl.innerText = `Gestión de ${AppConfig.cliente.nombre}`;
   },
 
   bindEvents() {
