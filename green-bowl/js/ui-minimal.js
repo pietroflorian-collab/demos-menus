@@ -4,14 +4,28 @@ export const UIMinimal = {
   generarTarjetaPlato(item, rol, currentSelection = []) {
     const isPausado = String(item.es_pausado).toLowerCase() === "true";
     const isSelected = currentSelection.some(i => i.id === item.id);
+    const isPicante = String(item.es_picante).toLowerCase() === "true";
+    const hasPromo = item.texto_promo && item.texto_promo.trim() !== "";
     
     const adminStyles = rol === 'admin' && isPausado ? 'opacity-50 grayscale' : '';
     const precioFormatted = formatPrice(item.precio);
-    
-    // ELIMINAMOS LAS ETIQUETAS ABSOLUTAS (ÓVALOS)
-    // La categoría ahora se muestra abajo en texto azul.
-    
     const imgUrl = item.imagen_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400';
+
+    // Etiqueta de promoción (Solo si hay texto)
+    let promoTagHTML = '';
+    if (hasPromo) {
+      promoTagHTML = `<span class="absolute top-4 left-4 bg-[#005ab7] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm z-10">${escapeHTML(item.texto_promo)}</span>`;
+    }
+
+    // Etiqueta de picante
+    let picanteHTML = '';
+    if (isPicante) {
+      picanteHTML = `
+        <div class="flex items-center gap-1 text-red-500 font-semibold text-xs mt-1">
+          <span class="material-symbols-outlined text-[14px]">local_fire_department</span> Picante
+        </div>
+      `;
+    }
 
     let actionBtn = '';
     if (rol === 'admin') {
@@ -40,14 +54,13 @@ export const UIMinimal = {
     return `
       <article class="group ${adminStyles} bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
         
-        <!-- Imagen Limpia, sin nada encima -->
-        <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+        <div class="relative w-full aspect-square sm:aspect-[4/3] overflow-hidden bg-gray-100">
           <img alt="${escapeHTML(item.nombre)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="${escapeHTML(imgUrl)}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400'"/>
+          ${promoTagHTML}
         </div>
         
         <div class="p-5 flex flex-col flex-grow bg-white">
           <div class="flex-grow">
-            <!-- Categoría en texto limpio abajo -->
             <div class="text-[11px] font-bold text-[#005ab7] uppercase tracking-widest mb-1.5">
               ${escapeHTML(item.categoria || 'General')}
             </div>
@@ -59,6 +72,7 @@ export const UIMinimal = {
             <p class="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-2">
               ${escapeHTML(item.descripcion || '')}
             </p>
+            ${picanteHTML}
           </div>
           
           ${rol === 'admin' ? actionBtn : `
