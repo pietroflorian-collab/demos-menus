@@ -1,9 +1,9 @@
-﻿import { db, MenuAPI, escapeHTML, showToast } from './api.js';
-import { UI } from './ui.js';
+﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
+import { UIEditorial } from './ui-editorial.js';
 import { AuthManager } from './auth.js';
 import { QRGenerator } from './qr.js';
 import { ImageUploader } from './image-uploader.js';
-import { doc, getDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { AppConfig } from './config.js';
 
 const MenuAdmin = {
   adminItems: [], 
@@ -18,6 +18,12 @@ const MenuAdmin = {
     ImageUploader.init();
     this.loadAdminData(); 
     this.enableDragScroll("admin-category-bar"); 
+    
+    // Inyección de título dinámico sin errores
+    const titleEl = document.getElementById('admin-sidebar-title');
+    if (titleEl && AppConfig && AppConfig.cliente) {
+      titleEl.innerText = AppConfig.cliente.nombre;
+    }
   },
 
   bindEvents() {
@@ -62,13 +68,13 @@ const MenuAdmin = {
     document.getElementById("admin-search-input")?.addEventListener('input', (e) => this.handleSearch(e.target.value));
     document.getElementById("itemForm")?.addEventListener('submit', (e) => this.handleFormSubmit(e));
     document.getElementById("catForm")?.addEventListener('submit', (e) => this.handleCreateCategorySubmit(e));
-    document.getElementById("empForm")?.addEventListener('submit', (e) => this.handleEmpSubmit(e));
     
     ['item-nombre', 'item-precio', 'item-categoria', 'item-descripcion', 'item-promo-texto'].forEach(id => { 
       document.getElementById(id)?.addEventListener('input', () => this.updateModalPreview()); 
     });
     
     document.getElementById('item-picante')?.addEventListener('change', () => this.updateModalPreview());
+    document.getElementById('item-pausado')?.addEventListener('change', () => this.updateModalPreview());
     
     ['config-promo-texto', 'config-promo-img'].forEach(id => { 
       document.getElementById(id)?.addEventListener('input', () => this.updatePromoPreview()); 
@@ -82,7 +88,6 @@ const MenuAdmin = {
     });
     
     document.getElementById("admin-grid")?.addEventListener('click', (e) => {
-      if (e.target.dataset.expandable) e.target.classList.toggle('line-clamp-3');
       const btn = e.target.closest('button[data-action]'); 
       if (!btn) return;
       if (btn.dataset.action === 'toggle-pause') this.togglePausado(btn.dataset.id);
@@ -96,21 +101,12 @@ const MenuAdmin = {
       if (btn.dataset.action === 'toggle-cat') this.toggleCategoryPause(btn.dataset.id, btn.dataset.state === 'true');
       if (btn.dataset.action === 'delete-cat') this.deleteCategory(btn.dataset.id);
     });
-    
-    document.getElementById("employee-list")?.addEventListener('click', (e) => { 
-      const btn = e.target.closest('button[data-action="delete-emp"]'); 
-      if (btn) this.revokeEmployee(btn.dataset.id); 
-    });
   },
 
   async handlePublishMenu() {
-    const config = await MenuAPI.getDeployConfig();
-    const usados = config.despliegues_usados || 0;
-    const restantes = 500 - usados;
-
     this.showConfirmDialog(
       "Publicar Menú en Vivo", 
-      `¿Estás seguro de que ya realizaste TODOS los cambios necesarios en el menú?\n\nTe quedan ${restantes} actualizaciones en vivo este mes.\nAprovecha para agrupar los cambios antes de publicar.`, 
+      `¿Estás seguro de que ya realizaste TODOS los cambios necesarios en el menú?\n\n(En modo Demo esto es una simulación).`, 
       async () => {
         const pcBtn = document.getElementById("nav-publish-btn");
         const mobBtn = document.getElementById("mobile-publish-btn");
@@ -120,18 +116,12 @@ const MenuAdmin = {
           if (pcBtn) { pcBtn.innerHTML = `<span class="material-symbols-outlined mr-2 text-base animate-spin">sync</span> Publicando...`; pcBtn.disabled = true; }
           if (mobBtn) { mobBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">sync</span>`; mobBtn.disabled = true; }
 
-          const secretSnap = await getDoc(doc(db, "sistema", "secretos"));
-          if (!secretSnap.exists()) throw new Error("Token de acceso no encontrado.");
+          await MenuAPI.publishMenuJSON();
           
-          const res = await MenuAPI.publishMenuJSON(secretSnap.data().token_github);
-          
-          if (res && res.status === 'success') {
-            document.getElementById("pending-changes-banner")?.classList.add("hidden");
-            if (this.adminConfig) this.adminConfig.cambios_pendientes = false;
-            showToast("¡Menú publicado en vivo exitosamente!", "success");
-          }
+          document.getElementById("pending-changes-banner")?.classList.add("hidden");
+          if (this.adminConfig) this.adminConfig.cambios_pendientes = false;
+          showToast("¡Menú publicado en vivo exitosamente!", "success");
         } catch (error) {
-          console.error("Error en publicación:", error);
           showToast(`Error: ${error.message}`, "error");
         } finally {
           if (pcBtn) { pcBtn.innerHTML = originalPcText; pcBtn.disabled = false; }
@@ -145,25 +135,10 @@ const MenuAdmin = {
     const slider = document.getElementById(id); 
     if (!slider) return; 
     let isDown = false, startX, scrollLeft;
-    
-    slider.addEventListener('mousedown', (e) => { 
-      isDown = true; 
-      startX = e.pageX - slider.offsetLeft; 
-      scrollLeft = slider.scrollLeft; 
-    });
+    slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
     slider.addEventListener('mouseleave', () => isDown = false); 
     slider.addEventListener('mouseup', () => isDown = false);
-    slider.addEventListener('mousemove', (e) => { 
-      if (!isDown) return; 
-      e.preventDefault(); 
-      slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft) - startX) * 2; 
-    });
-    slider.addEventListener('wheel', (e) => { 
-      if (e.deltaY !== 0) { 
-        e.preventDefault(); 
-        slider.scrollLeft += e.deltaY; 
-      } 
-    }, { passive: false });
+    slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); slider.scrollLeft = scrollLeft - ((e.pageX - slider.offsetLeft) - startX) * 2; });
   },
 
   async loadAdminData() {
@@ -173,11 +148,6 @@ const MenuAdmin = {
     const res = await MenuAPI.fetchItems(true); 
     this.adminItems = res.items || []; 
     this.adminCategories = res.categories || []; 
-    if (this.adminConfig.cambios_pendientes === true) {
-      document.getElementById("pending-changes-banner")?.classList.remove("hidden");
-    } else {
-      document.getElementById("pending-changes-banner")?.classList.add("hidden");
-    }
     
     document.getElementById("admin-loading").classList.add("hidden"); 
     document.getElementById("admin-grid").classList.remove("hidden");
@@ -187,13 +157,8 @@ const MenuAdmin = {
     this.renderAdminGrid();
   },
 
-  openModalHelper(id) { 
-    document.getElementById(id)?.classList.replace("hidden", "flex"); 
-  },
-  
-  closeModalHelper(id) { 
-    document.getElementById(id)?.classList.replace("flex", "hidden"); 
-  },
+  openModalHelper(id) { document.getElementById(id)?.classList.replace("hidden", "flex"); },
+  closeModalHelper(id) { document.getElementById(id)?.classList.replace("flex", "hidden"); },
 
   showConfirmDialog(title, message, action) {
     document.getElementById('confirm-title').innerText = title; 
@@ -202,95 +167,16 @@ const MenuAdmin = {
     this.openModalHelper('confirmModal');
   },
   
-  closeConfirmDialog() { 
-    this.closeModalHelper('confirmModal'); 
-    this.pendingConfirmAction = null; 
-  },
-  
-  executeConfirmAction() { 
-    this.closeModalHelper('confirmModal'); 
-    if (this.pendingConfirmAction) { 
-      this.pendingConfirmAction(); 
-      this.pendingConfirmAction = null; 
-    } 
-  },
+  closeConfirmDialog() { this.closeModalHelper('confirmModal'); this.pendingConfirmAction = null; },
+  executeConfirmAction() { this.closeModalHelper('confirmModal'); if (this.pendingConfirmAction) { this.pendingConfirmAction(); this.pendingConfirmAction = null; } },
 
-  async openEmployeeModal() { 
-    if (AuthManager.userRole === 'editor') { 
-      showToast("Acceso denegado. Solo administradores.", "error"); 
-      return; 
-    } 
-    this.openModalHelper("employeeModal"); 
-    this.loadEmployees(); 
-  },
-
-  async loadEmployees() {
-    const listContainer = document.getElementById("employee-list"); 
-    listContainer.innerHTML = `<span class="text-secondary text-sm">Cargando personal...</span>`;
-    
-    try {
-      const snap = await getDocs(collection(db, 'usuarios')); 
-      const html = [];
-      
-      snap.forEach(docSnap => {
-        const data = docSnap.data(); 
-        
-        html.push(`
-          <div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border border-outline-30">
-            <div>
-              <p class="font-label-bold text-sm text-on-surface">${escapeHTML(data.email || 'Sin correo registrado')}</p>
-              <p class="text-xs text-primary uppercase">${escapeHTML(data.rol)}</p>
-            </div>
-            <button data-action="delete-emp" data-id="${docSnap.id}" class="p-2 text-error hover:bg-error/10 rounded transition-colors" title="Revocar Acceso">
-              <span class="material-symbols-outlined pointer-events-none text-xl">person_remove</span>
-            </button>
-          </div>
-        `);
-      });
-      
-      listContainer.innerHTML = html.length > 0 ? html.join("") : `<span class="text-secondary text-sm">No hay empleados registrados.</span>`;
-    } catch (error) { 
-      listContainer.innerHTML = `<span class="text-error text-sm">Error al cargar personal.</span>`; 
-    }
-  },
-
-  async handleEmpSubmit(e) {
-    e.preventDefault(); 
-    const btn = document.getElementById("submit-emp-btn"); 
-    btn.disabled = true; 
-    btn.innerText = "Procesando...";
-    
-    const success = await AuthManager.registrarEmpleado(
-      document.getElementById("emp-email").value.trim(), 
-      document.getElementById("emp-pass").value.trim(), 
-      document.getElementById("emp-rol").value
-    );
-    
-    if(success) { 
-      document.getElementById("empForm").reset(); 
-      this.loadEmployees(); 
-    } 
-    
-    btn.disabled = false; 
-    btn.innerText = "Crear Empleado";
-  },
-
-  async revokeEmployee(uid) {
-    this.showConfirmDialog("Revocar Acceso", "¿Estás seguro de revocar permanentemente el acceso a este empleado? No podrá volver a ingresar al sistema.", async () => {
-      try { 
-        await deleteDoc(doc(db, 'usuarios', uid)); 
-        showToast("Acceso revocado", "success"); 
-        this.loadEmployees(); 
-      } catch (error) { 
-        showToast("Error al revocar acceso", "error"); 
-      }
-    });
+  openEmployeeModal() { 
+    showToast("Gestión de personal no disponible en la demo.", "info"); 
   },
 
   openPromoModal() {
     document.getElementById("config-promo-file").value = "";
     ImageUploader.pendingPromoImageBase64 = null;
-    
     document.getElementById("config-promo-activa").checked = String(this.adminConfig.promo_activa).toLowerCase() === "true"; 
     document.getElementById("config-promo-texto").value = this.adminConfig.promo_texto || "";
     document.getElementById("config-promo-img").value = this.adminConfig.promo_imagen || ""; 
@@ -303,51 +189,30 @@ const MenuAdmin = {
     const url = document.getElementById("config-promo-img").value.trim();
     document.getElementById("admin-preview-promo-texto").innerText = texto; 
     const imgEl = document.getElementById("admin-preview-promo-img");
-    
-    if (url) { 
-      imgEl.src = url; 
-      imgEl.classList.remove("hidden"); 
-    } else { 
-      imgEl.src = ""; 
-      imgEl.classList.add("hidden"); 
-    }
+    if (url) { imgEl.src = url; imgEl.classList.remove("hidden"); } else { imgEl.src = ""; imgEl.classList.add("hidden"); }
   },
   
   async savePromoConfig() {
     const btn = document.getElementById("promo-save-btn"); 
-    btn.innerText = "Procesando..."; 
-    btn.disabled = true;
-    
+    btn.innerText = "Procesando..."; btn.disabled = true;
     try {
       let finalImageUrl = document.getElementById("config-promo-img").value;
-      
       if (ImageUploader.pendingPromoImageBase64) {
-        btn.innerText = "Subiendo imagen..."; 
         finalImageUrl = await ImageUploader.uploadToGitHub(ImageUploader.pendingPromoImageBase64, true);
       }
-
-      btn.innerText = "Guardando datos..."; 
       const payload = { 
         promo_activa: document.getElementById("config-promo-activa").checked.toString(), 
         promo_texto: document.getElementById("config-promo-texto").value, 
         promo_imagen: finalImageUrl 
       };
-      
       const res = await MenuAPI.updateConfig(payload); 
       if(res && res.status === "success") { 
         showToast("Anuncio guardado", "success"); 
-        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         this.adminConfig = payload; 
         this.closeModalHelper("promoConfigModal"); 
-      } else { 
-        throw new Error(res?.message || "Error al guardar"); 
       } 
-    } catch (error) { 
-      showToast(`Error: ${error.message}`, "error"); 
-    } finally { 
-      btn.innerText = "Guardar Anuncio"; 
-      btn.disabled = false; 
-    }
+    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
+    finally { btn.innerText = "Guardar Anuncio"; btn.disabled = false; }
   },
 
   openQRModal() { 
@@ -361,23 +226,22 @@ const MenuAdmin = {
       const name = (cat.nombre || "").toLowerCase(); 
       return name !== "combos y promo" && name !== "combos y promos"; 
     }); 
-    document.getElementById("item-categoria").innerHTML = categoriasReales.map(cat => `<option value="${escapeHTML(cat.nombre)}" class="bg-surface-container-high text-on-surface">${escapeHTML(cat.nombre)}</option>`).join(""); 
+    document.getElementById("item-categoria").innerHTML = categoriasReales.map(cat => `<option value="${escapeHTML(cat.nombre)}">${escapeHTML(cat.nombre)}</option>`).join(""); 
   },
   
   setupAdminCategories() {
     if (this.adminCategories.length === 0) return;
+    let categoriasVisibles = this.adminCategories.map(c => c.nombre); 
     
-    let categoriasVisibles = this.adminCategories.filter(c => { 
-      const name = (c.nombre || "").toLowerCase(); 
-      return !name.includes("combo") && !name.includes("promo"); 
-    }); 
-    categoriasVisibles.push({ nombre: "Combos y Promo", es_pausada: false });
-    
-    if (!this.selectedCategory || !categoriasVisibles.some(c => c.nombre === this.selectedCategory)) {
-      this.selectedCategory = categoriasVisibles[0].nombre;
+    if (!this.selectedCategory || !categoriasVisibles.includes(this.selectedCategory)) {
+      this.selectedCategory = categoriasVisibles[0];
     }
     
-    document.getElementById("admin-category-bar").innerHTML = categoriasVisibles.map(cat => `<button data-category="${escapeHTML(cat.nombre)}" class="w-44 h-11 px-3 py-2 rounded-full font-label-bold text-sm shrink-0 transition-all ${cat.es_pausada ? 'opacity-50 grayscale border-dashed' : ''} ${this.selectedCategory === cat.nombre ? 'bg-primary text-sushi-white' : 'bg-surface-container-highest text-tertiary hover:bg-surface-bright'}">${escapeHTML(cat.nombre)} ${cat.es_pausada ? '⏸' : ''}</button>`).join("");
+    document.getElementById("admin-category-bar").innerHTML = categoriasVisibles.map(cat => `
+      <button data-category="${escapeHTML(cat)}" class="px-4 py-2 text-sm font-display uppercase tracking-widest shrink-0 transition-all ${this.selectedCategory === cat ? 'text-[#6c131c] border-b-2 border-[#6c131c]' : 'text-gray-600 hover:text-[#6c131c]'}">
+        ${escapeHTML(cat)}
+      </button>
+    `).join("");
   },
   
   filterAdminCategory(cat) { 
@@ -393,24 +257,14 @@ const MenuAdmin = {
 
   renderAdminGrid() {
     const grid = document.getElementById("admin-grid");
-    
     const filtered = this.adminItems.filter(i => { 
       const safeName = i.nombre || ""; 
       const matchesSearch = !this.searchQuery || safeName.toLowerCase().includes(this.searchQuery); 
-      let matchesCategory = false; 
-      
-      if (this.selectedCategory === "Combos y Promo") { 
-        const cat = (i.categoria || "").toLowerCase(); 
-        matchesCategory = (cat === "combos" || cat === "promociones" || cat === "promos" || cat === "promo" || (i.dias_promo && i.dias_promo.trim() !== "")); 
-      } else { 
-        matchesCategory = this.searchQuery ? true : (i.categoria === this.selectedCategory); 
-      } 
-      
-      return matchesSearch && matchesCategory; 
+      return matchesSearch && (this.searchQuery ? true : (i.categoria === this.selectedCategory)); 
     });
     
-    const itemsHTML = filtered.map(item => UI.generarTarjetaPlato(item, 'admin')).join(""); 
-    grid.innerHTML = itemsHTML + `<div id="btn-add-grid" class="rounded-xl border-2 border-dashed border-primary/40 hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center min-h-[240px] cursor-pointer group"><div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors"><span class="material-symbols-outlined text-3xl">add</span></div><span class="font-label-bold text-tertiary group-hover:text-primary">Añadir Nuevo</span></div>`;
+    const itemsHTML = filtered.map(item => UIEditorial.generarTarjetaPlato(item, 'admin')).join(""); 
+    grid.innerHTML = itemsHTML + `<div id="btn-add-grid" class="w-full py-10 border-b border-[#ddc0bf] flex flex-col items-center justify-center cursor-pointer group opacity-60 hover:opacity-100 transition-opacity"><span class="font-display text-lg text-[#6c131c] italic mb-2">Añadir nueva receta</span><span class="material-symbols-outlined text-[#6c131c]">add_circle</span></div>`;
     document.getElementById("btn-add-grid")?.addEventListener('click', () => this.openModal());
   },
 
@@ -421,11 +275,11 @@ const MenuAdmin = {
   
   renderCategoryManageList() {
     document.getElementById("category-manage-list").innerHTML = this.adminCategories.map(cat => `
-      <div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border border-outline-30">
-        <span class="font-label-bold text-sm ${cat.es_pausada ? 'line-through text-secondary' : 'text-on-surface'}">${escapeHTML(cat.nombre)}</span>
+      <div class="flex items-center justify-between p-3 border border-[#ddc0bf] bg-white">
+        <span class="font-display text-sm ${cat.es_pausada ? 'line-through text-gray-400' : 'text-gray-900'}">${escapeHTML(cat.nombre)}</span>
         <div class="flex gap-2">
-          <button data-action="toggle-cat" data-id="${escapeHTML(cat.id)}" data-state="${!cat.es_pausada}" class="px-3 py-1 rounded text-xs font-label-bold ${cat.es_pausada ? 'bg-primary text-sushi-white' : 'bg-surface-variant text-secondary'}">${cat.es_pausada ? 'Reactivar' : 'Pausar'}</button>
-          <button data-action="delete-cat" data-id="${escapeHTML(cat.id)}" class="p-1 text-error hover:bg-error/10 rounded"><span class="material-symbols-outlined pointer-events-none">delete</span></button>
+          <button data-action="toggle-cat" data-id="${escapeHTML(cat.id)}" data-state="${!cat.es_pausada}" class="text-xs uppercase tracking-wider ${cat.es_pausada ? 'text-green-600' : 'text-gray-500'}">${cat.es_pausada ? 'Reactivar' : 'Pausar'}</button>
+          <button data-action="delete-cat" data-id="${escapeHTML(cat.id)}" class="text-red-500"><span class="material-symbols-outlined text-[16px]">delete</span></button>
         </div>
       </div>
     `).join("");
@@ -434,55 +288,28 @@ const MenuAdmin = {
   async handleCreateCategorySubmit(e) {
     e.preventDefault(); 
     const btn = document.getElementById("add-cat-btn"); 
-    btn.disabled = true; 
-    btn.innerText = "Creando...";
-    
+    btn.disabled = true; btn.innerText = "Creando...";
     try { 
       const res = await MenuAPI.createCategory({ nombre: document.getElementById("new-cat-name").value.trim() }); 
       if (res && res.status === "success") { 
         document.getElementById("new-cat-name").value = ""; 
         showToast("Categoría creada", "success"); 
-        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         await this.loadAdminData(); 
         this.renderCategoryManageList(); 
-      } else { 
-        throw new Error(res?.message || "Rechazado por la BD."); 
       } 
-    } catch (error) { 
-      showToast(`Error: ${error.message}`, "error"); 
-    } finally { 
-      btn.disabled = false; 
-      btn.innerText = "+ Crear"; 
-    }
+    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
+    finally { btn.disabled = false; btn.innerText = "+ Crear"; }
   },
   
   async toggleCategoryPause(id, esPausada) { 
-    try { 
-      const res = await MenuAPI.updateCategory({ id: id, es_pausada: esPausada }); 
-      if (res && res.status === "success") { 
-        showToast("Estado actualizado", "info"); 
-        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
-        await this.loadAdminData(); 
-        this.renderCategoryManageList(); 
-      } 
-    } catch (error) { 
-      showToast(`Error: ${error.message}`, "error"); 
-    } 
+    try { await MenuAPI.updateCategory({ id: id, es_pausada: esPausada }); showToast("Estado actualizado", "info"); await this.loadAdminData(); this.renderCategoryManageList(); } 
+    catch (error) { showToast(`Error: ${error.message}`, "error"); } 
   },
   
   async deleteCategory(id) {
-    this.showConfirmDialog("Eliminar Categoría", "Esta acción es irreversible y podría afectar los platos que tengan esta categoría asignada.", async () => {
-      try { 
-        const res = await MenuAPI.deleteCategory(id); 
-        if (res && res.status === "success") { 
-          showToast("Eliminada", "success"); 
-          document.getElementById("pending-changes-banner")?.classList.remove("hidden");
-          await this.loadAdminData(); 
-          this.renderCategoryManageList(); 
-        } 
-      } catch (error) { 
-        showToast(`Error: ${error.message}`, "error"); 
-      }
+    this.showConfirmDialog("Eliminar Categoría", "Esta acción es irreversible.", async () => {
+      try { await MenuAPI.deleteCategory(id); showToast("Eliminada", "success"); await this.loadAdminData(); this.renderCategoryManageList(); } 
+      catch (error) { showToast(`Error: ${error.message}`, "error"); }
     });
   },
 
@@ -498,25 +325,18 @@ const MenuAdmin = {
       texto_promo: document.getElementById("item-promo-texto").value.trim() 
     };
     const contenedor = document.getElementById("preview-container"); 
-    if (contenedor && typeof UI !== 'undefined') contenedor.innerHTML = UI.generarTarjetaPlato(itemEnVivo, 'preview');
+    if (contenedor && typeof UIEditorial !== 'undefined') contenedor.innerHTML = UIEditorial.generarTarjetaPlato(itemEnVivo, 'admin');
   },
   
   async togglePausado(id) {
     const item = this.adminItems.find(i => i.id == id); 
     if (!item) return; 
-    
     item.es_pausado = !(String(item.es_pausado).toLowerCase() === "true");
     try { 
-      const res = await MenuAPI.updateItem(item); 
-      if (res && res.status === "success") { 
-        showToast("Estado actualizado", "info"); 
-        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
-        this.renderAdminGrid(); 
-      } else throw new Error("Rechazado"); 
-    } catch (error) { 
-      item.es_pausado = !item.es_pausado; 
-      showToast(`Error al pausar: ${error.message}`, "error"); 
-    }
+      await MenuAPI.updateItem(item); 
+      showToast("Estado actualizado", "info"); 
+      this.renderAdminGrid(); 
+    } catch (error) { item.es_pausado = !item.es_pausado; showToast(`Error: ${error.message}`, "error"); }
   },
   
   openModal(item = null) {
@@ -536,41 +356,26 @@ const MenuAdmin = {
       document.getElementById("item-picante").checked = String(item.es_picante).toLowerCase() === "true"; 
       document.getElementById("item-pausado").checked = String(item.es_pausado).toLowerCase() === "true"; 
       document.getElementById("item-promo-texto").value = item.texto_promo || ""; 
-      
       if (item.dias_promo) { 
         const activeDays = item.dias_promo.split(',').map(d => d.trim()); 
-        document.querySelectorAll('input[name="promo-dia"]').forEach(cb => { 
-          if (activeDays.includes(cb.value)) cb.checked = true; 
-        }); 
+        document.querySelectorAll('input[name="promo-dia"]').forEach(cb => { if (activeDays.includes(cb.value)) cb.checked = true; }); 
       }
-    } else { 
-      document.getElementById("item-imagen-url").value = ""; 
     } 
-    
     this.updateModalPreview(); 
     this.openModalHelper("itemModal");
   },
   
-  editItem(id) { 
-    const item = this.adminItems.find(i => i.id == id); 
-    if (item) this.openModal(item); 
-  },
+  editItem(id) { const item = this.adminItems.find(i => i.id == id); if (item) this.openModal(item); },
   
   async deleteItem(id) { 
-    this.showConfirmDialog("Eliminar Plato", "¿Estás seguro? Esta acción borrará el plato de la base de datos.", async () => {
+    this.showConfirmDialog("Eliminar Plato", "¿Estás seguro? El plato desaparecerá.", async () => {
       try { 
         const res = await MenuAPI.deleteItem(id); 
         if (res && res.status === "success") { 
           showToast("Plato eliminado", "success"); 
-          document.getElementById("pending-changes-banner")?.classList.remove("hidden");
           await this.loadAdminData(); 
-        } else { 
-          throw new Error("No se pudo borrar el documento."); 
-        }
-      } catch (error) { 
-        console.error("Error en deleteItem:", error); 
-        showToast(`Error: ${error.message}`, "error"); 
-      }
+        } 
+      } catch (error) { showToast(`Error: ${error.message}`, "error"); }
     });
   },
 
@@ -578,29 +383,17 @@ const MenuAdmin = {
     e.preventDefault(); 
     const btn = document.getElementById("submit-btn"); 
     btn.disabled = true; 
-    
     try {
       const nombreInput = document.getElementById("item-nombre").value.trim();
       const itemId = document.getElementById("item-id").value;
-
-      const esDuplicado = this.adminItems.some(item => 
-        item.nombre.toLowerCase() === nombreInput.toLowerCase() && item.id !== itemId
-      );
-
-      if (esDuplicado) {
-        showToast("Ya existe un plato con este nombre.", "error");
-        btn.disabled = false;
-        return; 
-      }
+      const esDuplicado = this.adminItems.some(item => item.nombre.toLowerCase() === nombreInput.toLowerCase() && item.id !== itemId);
+      if (esDuplicado) { showToast("Ya existe un plato con este nombre.", "error"); btn.disabled = false; return; }
 
       let finalImageUrl = document.getElementById("item-imagen-url").value;
-      
-      if (ImageUploader.pendingImageBase64) {
+      if (ImageUploader.pendingImageBase64) { 
         btn.innerText = "Subiendo imagen..."; 
         finalImageUrl = await ImageUploader.uploadToGitHub(ImageUploader.pendingImageBase64, false); 
       }
-      
-      btn.innerText = "Guardando datos...";
       
       const payload = {
         nombre: nombreInput, 
@@ -615,24 +408,15 @@ const MenuAdmin = {
       };
       
       if (itemId) { payload.id = itemId; }
-      
       const res = itemId ? await MenuAPI.updateItem(payload) : await MenuAPI.createItem(payload);
       
       if (res && res.status === "success") { 
         showToast("Plato guardado con éxito", "success"); 
-        document.getElementById("pending-changes-banner")?.classList.remove("hidden");
         this.closeModalHelper("itemModal"); 
         await this.loadAdminData(); 
-      } else { 
-        throw new Error(res?.message || "Error en Firestore."); 
-      }
-    } catch (error) { 
-      console.error("Error al guardar:", error); 
-      showToast(`Error: ${error.message}`, "error"); 
-    } finally { 
-      btn.disabled = false; 
-      btn.innerText = "Guardar Plato"; 
-    }
+      } 
+    } catch (error) { showToast(`Error: ${error.message}`, "error"); } 
+    finally { btn.disabled = false; btn.innerText = "Guardar Plato"; }
   }
 };
 
