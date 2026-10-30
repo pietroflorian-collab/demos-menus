@@ -1,13 +1,11 @@
 ﻿﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
-import { AppConfig } from './config.js';
-import { UISakura } from './ui-sakura.js';
+import { UISakura } from './ui-sakura.js'; // <-- Importa el generador de tarjetas correcto
 
-const GreenBowlMenu = {
+const SakuraMenu = {
   allItems: [], 
   categoriesList: [], 
   selectedCategory: "", 
-  STORAGE_KEY: "greenbowl_selection",
-  
+  STORAGE_KEY: "sakura_order_selection",
 
   getSelection() { 
     try { return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || []; } catch (e) { return []; } 
@@ -50,7 +48,7 @@ const GreenBowlMenu = {
       modal.classList.remove("hidden");
       setTimeout(() => {
         modal.classList.remove("opacity-0");
-        document.getElementById("modal-content").classList.remove("scale-95");
+        document.getElementById("modal-content")?.classList.remove("scale-95");
       }, 10);
     }
   },
@@ -59,8 +57,32 @@ const GreenBowlMenu = {
     const modal = document.getElementById("order-modal");
     if (modal) {
       modal.classList.add("opacity-0");
-      document.getElementById("modal-content").classList.add("scale-95");
+      document.getElementById("modal-content")?.classList.add("scale-95");
       setTimeout(() => modal.classList.add("hidden"), 300);
+    }
+  },
+
+  aplicarTema(tema) {
+    if (!tema) return;
+    const HEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    const val = (v) => { if (!v) return null; const s = String(v).trim(); return HEX.test(s) ? s : null; };
+
+    const colorPrimario   = val(tema.colorPrimario);
+    const colorFondo      = val(tema.colorFondo);
+    const colorTexto      = val(tema.colorTexto);
+    const colorTextoSuave = val(tema.colorTextoSuave);
+    
+    if (colorPrimario || colorFondo || colorTexto || colorTextoSuave) {
+      let styleEl = document.getElementById('dynamic-theme');
+      if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'dynamic-theme'; document.head.appendChild(styleEl); }
+      
+      let css = ':root {\n';
+      if (colorPrimario) { css += `  --color-primary: ${colorPrimario};\n`; }
+      if (colorFondo) { css += `  --color-surface: ${colorFondo};\n  --color-surface-container-lowest: ${colorFondo};\n`; }
+      if (colorTexto) { css += `  --color-on-surface: ${colorTexto};\n  --color-sushi-white: ${colorTexto};\n`; }
+      if (colorTextoSuave) { css += `  --color-on-surface-variant: ${colorTextoSuave};\n`; }
+      css += '}';
+      styleEl.textContent = css;
     }
   },
 
@@ -81,7 +103,7 @@ const GreenBowlMenu = {
     if (!modalList) return;
     
     if (list.length === 0) {
-      modalList.innerHTML = `<div class="text-center py-8"><span class="material-symbols-outlined text-gray-300 text-5xl mb-2">shopping_cart</span><p class="text-gray-500">Tu lista está vacía.</p></div>`;
+      modalList.innerHTML = `<div class="text-center py-8"><p class="text-gray-500">Tu lista está vacía.</p></div>`;
     } else {
       modalList.innerHTML = list.map(item => {
         const platoInfo = this.allItems.find(p => p.id === item.id);
@@ -89,13 +111,13 @@ const GreenBowlMenu = {
         return `
           <div class="flex items-center justify-between border-b border-gray-100 pb-3">
             <div class="flex flex-col">
-              <span class="font-semibold text-gray-800">${escapeHTML(item.nombre)}</span>
-              <span class="text-sm text-gray-500">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
+              <span class="font-semibold text-white">${escapeHTML(item.nombre)}</span>
+              <span class="text-sm text-gray-400">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
             </div>
-            <div class="flex items-center gap-3 bg-gray-100 rounded-lg px-2 py-1">
-              <button data-action="decrease" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">-</button>
-              <span class="text-sm font-semibold w-4 text-center">${item.cantidad}</span>
-              <button data-action="increase" data-id="${item.id}" class="text-gray-600 hover:text-black font-bold">+</button>
+            <div class="flex items-center gap-3 bg-gray-800 rounded-lg px-2 py-1">
+              <button data-action="decrease" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold">-</button>
+              <span class="text-sm font-semibold w-4 text-center text-white">${item.cantidad}</span>
+              <button data-action="increase" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold">+</button>
             </div>
           </div>
         `;
@@ -107,13 +129,17 @@ const GreenBowlMenu = {
     this.bindEvents();
     try {
       const data = await MenuAPI.fetchItems();
+      this.config = data.config || {};
+      this.tema = data.tema || {};
+      this.aplicarTema(this.tema);
+
+      // Inyección de datos en el HTML
+      document.getElementById('brand-title').innerText = "SAKURA NIKKEI";
+      document.getElementById('brand-slogan').innerText = "Fusión Sin Límites";
+      document.getElementById('brand-desc').innerText = "Los mejores cortes de sushi y platos nikkei en un ambiente único.";
+
       this.allItems = data.items || [];
       this.categoriesList = data.categories || [];
-      
-      // INYECCIÓN DE DATOS (Sin hardcodeo)
-      document.getElementById('brand-title').innerText = AppConfig.cliente.nombre;
-      document.getElementById('brand-slogan').innerText = AppConfig.cliente.eslogan;
-      document.getElementById('brand-desc').innerText = AppConfig.cliente.descripcionComercial;
       
     } catch (e) {
       console.error("Error cargando menú", e);
@@ -136,12 +162,9 @@ const GreenBowlMenu = {
 
     bindClick("btn-whatsapp-checkout", () => {
       const list = this.getSelection();
-      if (list.length === 0) {
-        showToast("Agrega platos a tu lista primero", "error");
-        return;
-      }
+      if (list.length === 0) { showToast("Agrega platos a tu lista primero", "error"); return; }
       
-      const numeroWhatsApp = AppConfig.cliente.whatsappCliente.replace(/\D/g,''); // Toma el número del config
+      const numeroWhatsApp = "573000000000"; // Configurar
       let mensaje = "¡Hola! Quisiera hacer el siguiente pedido:\n\n";
       let total = 0;
       
@@ -185,7 +208,7 @@ const GreenBowlMenu = {
     
     categoryBar.innerHTML = categoriasVisibles.map(cat => `
       <button data-category="${escapeHTML(cat)}" class="category-btn shrink-0 rounded-full px-6 py-2.5 font-semibold text-sm transition-all duration-200 
-      ${this.selectedCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}">
+      ${this.selectedCategory === cat ? 'bg-[#AD2020] text-white shadow-sm' : 'bg-[#1f1f1f] text-gray-400 border border-gray-700 hover:bg-[#2a2a2a]'}">
         ${escapeHTML(cat)}
       </button>
     `).join("");
@@ -204,7 +227,8 @@ const GreenBowlMenu = {
       return;
     }
 
-    grid.innerHTML = filtered.map(item => UISakura.generarTarjetaPlatoo(item, 'client', this.getSelection())).join("");
+    // LLAMADA CORREGIDA
+    grid.innerHTML = filtered.map(item => UISakura.generarTarjetaPlato(item, 'client', this.getSelection())).join("");
   },
 
   filterCategory(cat) { 
@@ -215,5 +239,5 @@ const GreenBowlMenu = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  GreenBowlMenu.init();
+  SakuraMenu.init();
 });

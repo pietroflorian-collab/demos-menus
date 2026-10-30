@@ -4,7 +4,7 @@ export const UI = {
   generarTarjetaPlato(item, rol, currentSelection = []) {
     const isPausado = String(item.es_pausado).toLowerCase() === "true";
     let rawUrl = item.imagen_url || '';
-    rawUrl = rawUrl.replace('https://raw.githubusercontent.com/sukidesumenu-svg/image_sukidesu/main', 'https://recursos-sukidesu.pages.dev');
+    rawUrl = rawUrl.replace('https://raw.githubusercontent.com/Demomenu-svg/image_Demo/main', 'https://recursos-demomenu.pages.dev');
     const optimizedImgUrl = rawUrl.replace('sz=w800', 'sz=w400');
     const isPicante = String(item.es_picante).toLowerCase() === "true";
     const hasPromoText = item.texto_promo && item.texto_promo.trim() !== "";

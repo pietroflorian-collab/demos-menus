@@ -60,7 +60,7 @@ export const QRGenerator = {
   update() {
     if (!this.qrCode) return;
 
-    let baseUrl = document.getElementById('qr-input-url')?.value.trim() || "https://menusukidesu.sukidesumenu.workers.dev/?v=2";
+    let baseUrl = document.getElementById('qr-input-url')?.value.trim() || "https://menuDemo.demomenu.workers.dev/?v=2";
     if(baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
     
     const textoQR = document.getElementById('qr-input-texto')?.value.trim() || 'MENÚ';
@@ -127,7 +127,7 @@ export const QRGenerator = {
       ctx.fillStyle = '#b71f22'; // Rojo primario
       ctx.font = 'bold 50px "Space Grotesk", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('SUKIDESU SUSHI', 400, 150);
+      ctx.fillText('DEMO SUSHI', 400, 150);
       
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';

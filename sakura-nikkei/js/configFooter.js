@@ -1,8 +1,8 @@
 ﻿// configFooter.js
 
 export const datosEstablecimiento = {
-    nombre: "SUKIDESU SUSHI",
-    correoPQR: "sushisukidesu2025@gmail.com",
+    nombre: "Sakura Nikke SUSHI",
+    correoPQR: "SakuraNikke2025@gmail.com",
     desarrollador: "Pietro Florian Galea",
     whatsappDev: "+573025303152",
     urlSIC: "https://www.sic.gov.co/"

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de QR - Sukidesu Sushi</title>
+  <title>Generador de QR</title>
   <style>
     body {
       background-color: #000000;
@@ -57,7 +57,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script>
-    const MENU_URL = "https://pietroflorian-collab.github.io/menu_sukidesu/";
+    const MENU_URL = "https://pietroflorian-collab.github.io/menu_Demo/";
 
     function generateQR() {
       const canvas = document.getElementById('qr-canvas');
@@ -146,7 +146,7 @@
     function downloadQR() {
       const canvas = document.getElementById('qr-canvas');
       const link = document.createElement('a');
-      link.download = 'QR_Mesa_Sukidesu_Menu.png';
+      link.download = 'QR_Mesa_Demo_Menu.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     }

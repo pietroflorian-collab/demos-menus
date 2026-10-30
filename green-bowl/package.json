@@ -1,5 +1,5 @@
 {
-  "name": "menu_sukidesu",
+  "name": "menu_Demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,16 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pietroflorian-collab/menu_sukidesu.git"
+    "url": "git+https://github.com/pietroflorian-collab/menu_Demo.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/pietroflorian-collab/menu_sukidesu/issues"
+    "url": "https://github.com/pietroflorian-collab/menu_Demo/issues"
   },
-  "homepage": "https://github.com/pietroflorian-collab/menu_sukidesu#readme",
+  "homepage": "https://github.com/pietroflorian-collab/menu_Demo#readme",
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
     "tailwindcss": "^4.3.3"
