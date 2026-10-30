@@ -1,55 +1,24 @@
 {
   "items": [
-    { 
-      "id": "g1", 
-      "nombre": "Bowl Mediterráneo", 
-      "descripcion": "Quinoa, falafel, hummus, tomates cherry, pepino y aderezo de limón tahini.", 
-      "precio": 22000, 
-      "categoria": "Signature Bowls", 
-      "imagen_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400", 
-      "es_picante": false, 
-      "es_pausado": false, 
-      "texto_promo": "", 
-      "dias_promo": "" 
-    },
-    { 
-      "id": "g2", 
-      "nombre": "Bowl Proteico", 
-      "descripcion": "Arroz integral, pechuga de pollo a la parrilla, aguacate, huevo cocido y espinacas.", 
-      "precio": 26000, 
-      "categoria": "Signature Bowls", 
-      "imagen_url": "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=400", 
-      "es_picante": false, 
-      "es_pausado": false, 
-      "texto_promo": "Nuevo", 
-      "dias_promo": "" 
-    },
-    { 
-      "id": "g3", 
-      "nombre": "Jugo Verde Detox", 
-      "descripcion": "Espinaca, apio, manzana verde, jengibre y limón.", 
-      "precio": 9000, 
-      "categoria": "Jugos Fríos", 
-      "imagen_url": "https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&q=80&w=400", 
-      "es_picante": false, 
-      "es_pausado": false, 
-      "texto_promo": "", 
-      "dias_promo": "" 
-    }
+    { "id": "g1", "nombre": "Bowl Mediterráneo", "descripcion": "Quinoa tricolor, garbanzos crocantes, pepino persa, hummus de remolacha y tahini de sésamo dorado.", "precio": 22000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
+    { "id": "g2", "nombre": "Salmon Truffle & Ponzu", "descripcion": "Salmón salvaje marinado, aguacate hass, edamame, arroz jazmín orgánico y aderezo trufado.", "precio": 26000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Favorito", "dias_promo": "" },
+    { "id": "g3", "nombre": "Green Goddess", "descripcion": "Kale masajeado, láminas de aguacate, brotes de alfalfa, semillas de calabaza y aderezo verde cremoso.", "precio": 24000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1626804475297-41609ea0d897?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Keto", "dias_promo": "" },
+    { "id": "g4", "nombre": "Warm Chipotle Tofu", "descripcion": "Tofu ahumado a la plancha, maíz dulce asado, frijol negro y quinoa con emulsión de chipotle suave.", "precio": 21000, "categoria": "Warm Grain Bowls", "imagen_url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "g5", "nombre": "Golden Tempeh", "descripcion": "Tempeh glaseado al miso dulce, zanahoria en juliana, repollo morado y arroz integral al vapor.", "precio": 20000, "categoria": "Warm Grain Bowls", "imagen_url": "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Vegano", "dias_promo": "" },
+    { "id": "g6", "nombre": "César de Kale Crunch", "descripcion": "Hojas de kale orgánico, aderezo césar de anacardos, crutones de pan de masa madre y lascas de parmesano.", "precio": 18000, "categoria": "Fresh Greens", "imagen_url": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "g7", "nombre": "Wrap de Pollo Pesto", "descripcion": "Tortilla integral, pechuga de pollo a la parrilla, pesto de albahaca, tomate y rúcula fresca.", "precio": 19000, "categoria": "Fresh Greens", "imagen_url": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "g8", "nombre": "Jugo Verde Detox", "descripcion": "Espinaca, apio, manzana verde, jengibre y limón. 100% orgánico y prensado en frío.", "precio": 9000, "categoria": "Cold Pressed", "imagen_url": "https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Detox", "dias_promo": "" },
+    { "id": "g9", "nombre": "Matcha Latte Frío", "descripcion": "Té matcha ceremonial, leche de avena y un toque de sirope de agave. Servido con hielo.", "precio": 12000, "categoria": "Cold Pressed", "imagen_url": "https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "g10", "nombre": "Cheesecake de Maracuyá", "descripcion": "Base de nueces y dátiles, crema de anacardos y coulis de maracuyá fresco. Sin azúcar refinada.", "precio": 14000, "categoria": "Postres Raw", "imagen_url": "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "g11", "nombre": "Brownie Vegano de Cacao", "descripcion": "Brownie denso de cacao puro, harina de almendras y nueces. Acompañado de helado de coco.", "precio": 13000, "categoria": "Postres Raw", "imagen_url": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
   ],
   "categories": [
     { "id": "c1", "nombre": "Signature Bowls", "es_pausada": false },
-    { "id": "c2", "nombre": "Jugos Fríos", "es_pausada": false }
+    { "id": "c2", "nombre": "Warm Grain Bowls", "es_pausada": false },
+    { "id": "c3", "nombre": "Fresh Greens", "es_pausada": false },
+    { "id": "c4", "nombre": "Cold Pressed", "es_pausada": false },
+    { "id": "c5", "nombre": "Postres Raw", "es_pausada": false }
   ],
-   "config": { "promo_activa": "false" },
-  "tema": { 
-    "colorPrimario": "#6c131c", 
-    "colorFondo": "#fef8f3", 
-    "colorTexto": "#1d1b19", 
-    "colorTextoSuave": "#635e55", 
-    "colorBordes": "#ddc0bf", 
-    "radioBordes": "0", 
-    "fuenteHeroEslogan": "Playfair Display", 
-    "fuentePlatoNombre": "Playfair Display" 
-  }
+  "config": { "promo_activa": "false" },
+  "tema": { "colorPrimario": "#005ab7", "colorFondo": "#f9f9f9", "colorTexto": "#1a1c1c", "colorTextoSuave": "#46464a", "colorBordes": "#e2e2e2", "radioBordes": "16", "fuenteHeroEslogan": "Inter", "fuentePlatoNombre": "Inter" }
 }

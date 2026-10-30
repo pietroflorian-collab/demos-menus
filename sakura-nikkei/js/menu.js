@@ -1,12 +1,13 @@
 ﻿﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
 import { AppConfig } from './config.js';
-import { UIMinimal } from './ui-minimal.js';
+import { UISakura } from './ui-sakura.js';
 
 const GreenBowlMenu = {
   allItems: [], 
   categoriesList: [], 
   selectedCategory: "", 
   STORAGE_KEY: "greenbowl_selection",
+  
 
   getSelection() { 
     try { return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || []; } catch (e) { return []; } 
@@ -203,7 +204,7 @@ const GreenBowlMenu = {
       return;
     }
 
-    grid.innerHTML = filtered.map(item => UIMinimal.generarTarjetaPlato(item, 'client', this.getSelection())).join("");
+    grid.innerHTML = filtered.map(item => UISakura.generarTarjetaPlatoo(item, 'client', this.getSelection())).join("");
   },
 
   filterCategory(cat) { 

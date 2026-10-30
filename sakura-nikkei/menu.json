@@ -1,22 +1,24 @@
 {
   "items": [
-    { "id": "s1", "nombre": "Ceviche Nikkei", "descripcion": "Pescado blanco, leche de tigre, toques de soya y ají amarillo.", "precio": 18000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
-    { "id": "s2", "nombre": "Acevichado Roll", "descripcion": "Camarón tempura, palta, cubierto de láminas de pescado y leche de tigre.", "precio": 32000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
+    { "id": "s1", "nombre": "Ceviche Nikkei", "descripcion": "Pescado blanco, leche de tigre, toques de soya y ají amarillo. Servido con choclo y camote crujiente.", "precio": 18000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
+    { "id": "s2", "nombre": "Gyoza de Cerdo", "descripcion": "Empanadillas japonesas selladas al vapor y doradas a la plancha, rellenas de cerdo y repollo.", "precio": 14000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Nuevo", "dias_promo": "" },
+    { "id": "s3", "nombre": "Acevichado Roll", "descripcion": "Camarón tempura, palta, cubierto de láminas de pescado y bañado en nuestra leche de tigre especial.", "precio": 32000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Favorito", "dias_promo": "" },
+    { "id": "s4", "nombre": "Rainbow Roll", "descripcion": "Cangrejo, pepino, envuelto en salmón, atún y aguacate. Un clásico visualmente impactante.", "precio": 35000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "s5", "nombre": "Dragon Roll", "descripcion": "Camarón tempura y anguila, cubierto de láminas de aguacate y bañado con salsa teriyaki.", "precio": 34000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "s6", "nombre": "Nikkei Dog", "descripcion": "Sushi perro con salmón, queso crema, cebollín y un toque de salsa acevichada.", "precio": 22000, "categoria": "Sushi Perros", "imagen_url": "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Picante", "dias_promo": "" },
+    { "id": "s7", "nombre": "Tokyo Dog", "descripcion": "Sushi perro con atún fresco, palta, tempura flakes y mayonesa japonesa spicy.", "precio": 24000, "categoria": "Sushi Perros", "imagen_url": "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "s8", "nombre": "Ramen Tonkotsu", "descripcion": "Caldo de hueso de cerdo cocido por 12 horas, fideos frescos, chashu, huevo marinado y nori.", "precio": 28000, "categoria": "Ramen", "imagen_url": "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Recomendado", "dias_promo": "" },
+    { "id": "s9", "nombre": "Ramen Miso", "descripcion": "Caldo de miso, fideos, maíz dulce, mantequilla, chashu y aceite de ajo negro.", "precio": 26000, "categoria": "Ramen", "imagen_url": "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
+    { "id": "s10", "nombre": "Combo Sakura (24 piezas)", "descripcion": "Selección del chef: 8 nigiris surtidos, 8 makis clásicos y 8 rolls acevichados. Ideal para 2 personas.", "precio": 65000, "categoria": "Combos", "imagen_url": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "2x1 HOY", "dias_promo": "Viernes" },
+    { "id": "s11", "nombre": "Nigiri de Salmón Flambeado", "descripcion": "Dos piezas de nigiri de salmón, selladas con soplete y bañadas en salsa de soya dulce.", "precio": 12000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
   ],
   "categories": [
     { "id": "c1", "nombre": "Entradas", "es_pausada": false },
-    { "id": "c2", "nombre": "Rollos Especiales", "es_pausada": false }
+    { "id": "c2", "nombre": "Rollos Especiales", "es_pausada": false },
+    { "id": "c3", "nombre": "Sushi Perros", "es_pausada": false },
+    { "id": "c4", "nombre": "Ramen", "es_pausada": false },
+    { "id": "c5", "nombre": "Combos", "es_pausada": false }
   ],
-  "config": { "promo_activa": "false" },
-  "tema": { 
-    "colorPrimario": "#AD2020", 
-    "colorFondo": "#000000", 
-    "colorTexto": "#e2e2e2", 
-    "colorTextoSuave": "#e3beba", 
-    "colorBordes": "#5b403e", 
-    "radioBordes": "8", 
-    "fuenteHeroEslogan": "Anybody", 
-    "fuentePlatoNombre": "Anybody", 
-    "fuentePlatoDescripcion": "Plus Jakarta Sans" 
-  }
+  "config": { "promo_activa": "true", "promo_texto": "¡2x1 en Rollos Acevichados todos los viernes!", "promo_imagen": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=800" },
+  "tema": { "colorPrimario": "#AD2020", "colorFondo": "#121212", "colorTexto": "#e2e2e2", "colorTextoSuave": "#e3beba", "colorBordes": "#5b403e", "radioBordes": "8", "fuenteHeroEslogan": "Anybody", "fuentePlatoNombre": "Anybody" }
 }
