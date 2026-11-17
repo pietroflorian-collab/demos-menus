@@ -24,7 +24,7 @@
         .container { 
             display: grid; 
             grid-template-columns: 1fr; 
-            gap: 16px; 
+            gap: 20px; 
             max-width: 500px; 
             margin: 0 auto; 
         }
@@ -34,34 +34,47 @@
             padding: 20px; 
             border-radius: 12px; 
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
             border: 1px solid #e2e8f0;
+        }
+        
+        .card-header {
+            margin-bottom: 15px;
+        }
+        .card-header h3 { margin: 0 0 5px 0; font-size: 18px; color: #0f172a; }
+        .card-header span { font-size: 13px; color: #64748b; }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
             transition: all 0.2s ease;
         }
-        .card:hover { 
-            transform: translateY(-2px);
-            border-color: #cbd5e1;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-        }
-        
-        .info h3 { margin: 0 0 5px 0; font-size: 18px; color: #0f172a; }
-        .info span { font-size: 13px; color: #64748b; }
-        
-        .btn-arrow {
+
+        .btn-client {
             background: #0f172a;
             color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: centser;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
+        }
+        .btn-client:hover {
+            background: #1e293b;
+        }
+
+        .btn-admin {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-admin:hover {
+            background: #e2e8f0;
+            color: #0f172a;
         }
         
         footer {
@@ -76,36 +89,46 @@
 
     <div class="header">
         <h1>Catálogo de Menús Digitales</h1>
-        <p>Selecciona una propuesta para interactuar con el diseño y el panel administrativo en tiempo real:</p>
+        <p>Explora los diseños y prueba la gestión en tiempo real:</p>
     </div>
 
     <div class="container">
         <!-- Green Bowl -->
-        <a href="./green-bowl/index.html" class="card">
-            <div class="info">
+        <div class="card">
+            <div class="card-header">
                 <h3>Green Bowl</h3>
                 <span>Estilo fresco, saludable y natural</span>
             </div>
-            <div class="btn-arrow">→</div>
-        </a>
+            <div class="actions">
+                <a href="./green-bowl/index.html" class="btn btn-client">📱 Ver Menú</a>
+                <a href="./green-bowl/admin.html" class="btn btn-admin">⚙️ Panel Admin</a>
+            </div>
+        </div>
 
         <!-- La Trattoria -->
-        <a href="./la-trattoria/index.html" class="card">
-            <div class="info">
+        <div class="card">
+            <div class="card-header">
                 <h3>La Trattoria</h3>
                 <span>Estilo italiano, elegante y clásico</span>
             </div>
-            <div class="btn-arrow">→</div>
-        </a>
+            <div class="actions">
+                <a href="./la-trattoria/index.html" class="btn btn-client">📱 Ver Menú</a>
+                <!-- Si luego creas su admin, puedes descomentar la línea de abajo -->
+                <!-- <a href="./la-trattoria/admin.html" class="btn btn-admin">⚙️ Panel Admin</a> -->
+            </div>
+        </div>
 
         <!-- Sakura Nikkei -->
-        <a href="./sakura-nikkei/index.html" class="card">
-            <div class="info">
+        <div class="card">
+            <div class="card-header">
                 <h3>Sakura Nikkei</h3>
                 <span>Estilo asiático, moderno y vanguardista</span>
             </div>
-            <div class="btn-arrow">→</div>
-        </a>
+            <div class="actions">
+                <a href="./sakura-nikkei/index.html" class="btn btn-client">📱 Ver Menú</a>
+                <!-- <a href="./sakura-nikkei/admin.html" class="btn btn-admin">⚙️ Panel Admin</a> -->
+            </div>
+        </div>
     </div>
 
     <footer>
