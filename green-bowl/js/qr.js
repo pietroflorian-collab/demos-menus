@@ -127,7 +127,7 @@ export const QRGenerator = {
       ctx.fillStyle = '#b71f22'; // Rojo primario
       ctx.font = 'bold 50px "Space Grotesk", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('DEMO SUSHI', 400, 150);
+      ctx.fillText('DEMO MENU', 400, 150);
       
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';

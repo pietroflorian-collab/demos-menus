@@ -4,21 +4,18 @@ export const UISakura = {
   generarTarjetaPlato(item, rol, currentSelection = []) {
     const isPausado = String(item.es_pausado).toLowerCase() === "true";
     const isSelected = currentSelection.some(i => i.id === item.id);
-    
-    // Estilos para el admin si el plato está pausado
+
     const adminStyles = rol === 'admin' && isPausado ? 'opacity-50 grayscale' : '';
     const precioFormatted = formatPrice(item.precio);
-    
-    // Etiquetas
+
     let tagHTML = '';
     if (item.etiquetas && item.etiquetas.length > 0) {
       tagHTML = `<span class="absolute top-3 left-3 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm z-10 uppercase tracking-widest">${escapeHTML(item.etiquetas[0])}</span>`;
     }
 
-    // Imagen
-    const imgUrl = item.imagen_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400';
+    const fallbackUrl = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400';
+    const imgUrl = (item.imagen_url && String(item.imagen_url).trim() !== '') ? item.imagen_url.trim() : fallbackUrl;
 
-    // Botones según el Rol
     let actionBtn = '';
     if (rol === 'admin') {
       actionBtn = `
@@ -42,17 +39,14 @@ export const UISakura = {
       `;
     }
 
-    // Tarjeta Escritorio (Horizontal) y Móvil (Vertical)
     return `
       <article class="group ${adminStyles} bg-[#121212] rounded-xl border border-[#5b403e]/50 overflow-hidden flex flex-col sm:flex-row transition-all duration-300 relative hover:border-[#AD2020]/50 shadow-lg">
         
-        <!-- Imagen -->
-        <div class="relative sm:w-2/5 w-full aspect-[4/3] sm:aspect-auto sm:min-h-[220px] bg-[#1a1a1a] overflow-hidden shrink-0">
-          <img alt="${escapeHTML(item.nombre)}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${escapeHTML(imgUrl)}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400'"/>
+        <div class="relative sm:w-2/5 w-full min-h-[190px] aspect-[4/3] sm:aspect-auto sm:min-h-[220px] bg-[#1a1a1a] overflow-hidden shrink-0">
+          <img alt="${escapeHTML(item.nombre)}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='${fallbackUrl}';"/>
           ${tagHTML}
         </div>
         
-        <!-- Contenido -->
         <div class="p-5 flex flex-col flex-grow justify-between bg-[#121212]">
           <div>
             <div class="text-[10px] font-bold text-[#ACC677] uppercase tracking-widest mb-1">
