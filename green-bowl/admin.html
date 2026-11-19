@@ -148,24 +148,80 @@
     </nav>
       <!-- MENÚ DESPLEGABLE MÓVIL -->
       <div id="mobile-menu-overlay" class="hidden md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex justify-start" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="w-64 bg-white h-full shadow-2xl flex flex-col animate-slide-in-left">
-          <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+        <div class="w-64 bg-white h-full shadow-2xl flex flex-col">
+          <div class="p-4 border-b border-gray-100 flex justify-between items-center shrink-0">
             <h2 class="text-lg font-bold text-gray-900">Opciones</h2>
-            <button onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="text-gray-500">
-              <span class="material-symbols-outlined">close</span>
+            <button type="button" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="text-gray-500 p-1">
+              <span class="material-symbols-outlined pointer-events-none">close</span>
             </button>
           </div>
+
           <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
-            <div class="text-xs font-bold text-gray-400 uppercase mb-1 mt-2">Catálogo</div>
-            <button id="mobile-new-btn" class="w-full flex items-center px-4 py-3 bg-gray-50 rounded-lg text-left">
-              <span class="material-symbols-outlined mr-3 text-[#005ab7]">add_circle</span><span class="font-medium text-sm">Nuevo Plato</span>
-            </button>
-            <button id="mobile-cat-btn" class="w-full flex items-center px-4 py-3 bg-gray-50 rounded-lg text-left">
-              <span class="material-symbols-outlined mr-3 text-[#005ab7]">folder_managed</span><span class="font-medium text-sm">Categorías</span>
+            <!-- CATÁLOGO -->
+            <div class="flex flex-col">
+              <button type="button" onclick="(() => { const el = document.getElementById('mob-menu-sub'); el.classList.toggle('hidden'); el.classList.toggle('flex'); this.querySelector('.chevron').classList.toggle('rotate-180'); })()" class="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-100 rounded-lg text-left">
+                <div class="flex items-center pointer-events-none">
+                  <span class="material-symbols-outlined mr-3 text-gray-500">inventory_2</span>
+                  <span class="font-semibold text-gray-700 text-sm">Catálogo</span>
+                </div>
+                <span class="material-symbols-outlined text-gray-400 chevron transition-transform duration-200 pointer-events-none">expand_more</span>
+              </button>
+              <div id="mob-menu-sub" class="hidden flex-col gap-1 pl-9 mt-1">
+                <button type="button" id="mobile-new-btn" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left">
+                  <span class="material-symbols-outlined mr-2 text-sm">add</span><span class="font-medium text-sm">Nuevo Plato</span>
+                </button>
+                <button type="button" id="mobile-cat-btn" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left">
+                  <span class="material-symbols-outlined mr-2 text-sm">folder_managed</span><span class="font-medium text-sm">Categorías</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- MARKETING -->
+            <div class="flex flex-col">
+              <button type="button" onclick="(() => { const el = document.getElementById('mob-marketing-sub'); el.classList.toggle('hidden'); el.classList.toggle('flex'); this.querySelector('.chevron').classList.toggle('rotate-180'); })()" class="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-100 rounded-lg text-left">
+                <div class="flex items-center pointer-events-none">
+                  <span class="material-symbols-outlined mr-3 text-gray-500">campaign</span>
+                  <span class="font-semibold text-gray-700 text-sm">Marketing</span>
+                </div>
+                <span class="material-symbols-outlined text-gray-400 chevron transition-transform duration-200 pointer-events-none">expand_more</span>
+              </button>
+              <div id="mob-marketing-sub" class="hidden flex-col gap-1 pl-9 mt-1">
+                <button type="button" id="mobile-promo-btn" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left">
+                  <span class="material-symbols-outlined mr-2 text-sm">loyalty</span><span class="font-medium text-sm">Banner Promo</span>
+                </button>
+                <button type="button" id="mobile-qr-btn" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left">
+                  <span class="material-symbols-outlined mr-2 text-sm">qr_code_2</span><span class="font-medium text-sm">Generar QR</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SISTEMA -->
+            <div class="flex flex-col">
+              <button type="button" onclick="(() => { const el = document.getElementById('mob-admin-sub'); el.classList.toggle('hidden'); el.classList.toggle('flex'); this.querySelector('.chevron').classList.toggle('rotate-180'); })()" class="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-100 rounded-lg text-left">
+                <div class="flex items-center pointer-events-none">
+                  <span class="material-symbols-outlined mr-3 text-gray-500">admin_panel_settings</span>
+                  <span class="font-semibold text-gray-700 text-sm">Sistema</span>
+                </div>
+                <span class="material-symbols-outlined text-gray-400 chevron transition-transform duration-200 pointer-events-none">expand_more</span>
+              </button>
+              <div id="mob-admin-sub" class="hidden flex-col gap-1 pl-9 mt-1">
+                <button type="button" id="mobile-emp-btn" onclick="document.getElementById('mobile-menu-overlay').classList.add('hidden')" class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left">
+                  <span class="material-symbols-outlined mr-2 text-sm">manage_accounts</span><span class="font-medium text-sm">Personal</span>
+                </button>
+                <a class="w-full flex items-center px-3 py-2 text-gray-600 hover:bg-gray-50 hover:text-[#005ab7] rounded-lg text-left" href="index.html?admin=true" target="_blank">
+                  <span class="material-symbols-outlined mr-2 text-sm">storefront</span><span class="font-medium text-sm">Ver Carta</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- CERRAR SESIÓN -->
+            <button type="button" id="mobile-logout-btn" class="w-full flex items-center px-3 py-2.5 mt-auto text-red-500 hover:bg-red-50 rounded-lg text-left transition-colors shrink-0">
+              <span class="material-symbols-outlined mr-3 text-sm">logout</span><span class="font-semibold text-sm">Cerrar Sesión</span>
             </button>
           </div>
         </div>
       </div>
+            
     <!-- ÁREA CENTRAL -->
     <main class="flex-1 ml-0 md:ml-64 flex flex-col relative z-10 min-w-0">
       
