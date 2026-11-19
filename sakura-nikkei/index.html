@@ -19,14 +19,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@700;800&family=Plus+Jakarta+Sans:wght@400&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="css/output.css?v=2.0" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#AD2020',
+            'primary-container': '#AD2020',
+            secondary: '#e3beba',
+            'secondary-fixed': '#ACC677',
+            surface: '#121212',
+            'surface-container': '#1a1a1a',
+            'surface-container-low': '#161616',
+            'surface-container-lowest': '#0d0d0d',
+            'surface-container-high': '#242424',
+            'surface-bright': '#2c2c2c',
+            'on-surface': '#e2e2e2',
+            'on-surface-variant': '#b8b8b8',
+            'sushi-white': '#ffffff',
+            'wasabi-green': '#ACC677',
+            error: '#ef4444',
+            'outline-20': 'rgba(91, 64, 62, 0.25)',
+            'outline-30': 'rgba(91, 64, 62, 0.4)',
+            'outline-40': 'rgba(91, 64, 62, 0.5)',
+            'outline-variant': '#5b403e'
+          }
+        }
+      }
+    };
+  </script>
   
   <script type="module">
     import { AppConfig } from './js/config.js';
+    const baseUrl = (AppConfig.urls?.produccion || '').replace(/\/+$/, '');
     document.getElementById('meta-title').innerText = `${AppConfig.cliente.nombre} - Menú`;
     document.getElementById('og-title').content = `${AppConfig.cliente.nombre} - Menú`;
     document.getElementById('og-desc').content = AppConfig.cliente.descripcionComercial;
-    document.getElementById('og-url').content = AppConfig.urls.produccion;
-    document.getElementById('og-image').content = `${AppConfig.urls.produccion}images/logo1.png`;
+    document.getElementById('og-url').content = baseUrl ? `${baseUrl}/` : window.location.href;
+    document.getElementById('og-image').content = baseUrl ? `${baseUrl}/images/logo1.png` : 'images/logo1.png';
     document.getElementById('brand-title').innerText = `${AppConfig.cliente.nombre} MENÚ`;
     document.getElementById('brand-slogan').innerText = AppConfig.cliente.eslogan;
     document.getElementById('brand-desc').innerText = AppConfig.cliente.descripcionComercial;
@@ -47,10 +80,6 @@
     .menu-card-img-wrapper img { transition: transform 0.3s ease; }
     .menu-card:hover .menu-card-img-wrapper img { transform: scale(1.05); }
     .glow-hover:hover { box-shadow: 0 0 15px var(--color-primary); }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: theme('colors.surface'); }
-    ::-webkit-scrollbar-thumb { background: theme('colors.surface-container'); border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: theme('colors.primary-container'); }
   </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col bg-surface text-on-surface relative">
