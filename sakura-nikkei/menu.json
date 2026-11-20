@@ -1,24 +1,213 @@
 {
   "items": [
-    { "id": "s1", "nombre": "Ceviche Nikkei", "descripcion": "Pescado blanco, leche de tigre, toques de soya y ají amarillo. Servido con choclo y camote crujiente.", "precio": 18000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
-    { "id": "s2", "nombre": "Gyoza de Cerdo", "descripcion": "Empanadillas japonesas selladas al vapor y doradas a la plancha, rellenas de cerdo y repollo.", "precio": 14000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Nuevo", "dias_promo": "" },
-    { "id": "s3", "nombre": "Acevichado Roll", "descripcion": "Camarón tempura, palta, cubierto de láminas de pescado y bañado en nuestra leche de tigre especial.", "precio": 32000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Favorito", "dias_promo": "" },
-    { "id": "s4", "nombre": "Rainbow Roll", "descripcion": "Cangrejo, pepino, envuelto en salmón, atún y aguacate. Un clásico visualmente impactante.", "precio": 35000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "s5", "nombre": "Dragon Roll", "descripcion": "Camarón tempura y anguila, cubierto de láminas de aguacate y bañado con salsa teriyaki.", "precio": 34000, "categoria": "Rollos Especiales", "imagen_url": "https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "s6", "nombre": "Nikkei Dog", "descripcion": "Sushi perro con salmón, queso crema, cebollín y un toque de salsa acevichada.", "precio": 22000, "categoria": "Sushi Perros", "imagen_url": "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "Picante", "dias_promo": "" },
-    { "id": "s7", "nombre": "Tokyo Dog", "descripcion": "Sushi perro con atún fresco, palta, tempura flakes y mayonesa japonesa spicy.", "precio": 24000, "categoria": "Sushi Perros", "imagen_url": "https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "s8", "nombre": "Ramen Tonkotsu", "descripcion": "Caldo de hueso de cerdo cocido por 12 horas, fideos frescos, chashu, huevo marinado y nori.", "precio": 28000, "categoria": "Ramen", "imagen_url": "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Recomendado", "dias_promo": "" },
-    { "id": "s9", "nombre": "Ramen Miso", "descripcion": "Caldo de miso, fideos, maíz dulce, mantequilla, chashu y aceite de ajo negro.", "precio": 26000, "categoria": "Ramen", "imagen_url": "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "s10", "nombre": "Combo Sakura (24 piezas)", "descripcion": "Selección del chef: 8 nigiris surtidos, 8 makis clásicos y 8 rolls acevichados. Ideal para 2 personas.", "precio": 65000, "categoria": "Combos", "imagen_url": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "2x1 HOY", "dias_promo": "Viernes" },
-    { "id": "s11", "nombre": "Nigiri de Salmón Flambeado", "descripcion": "Dos piezas de nigiri de salmón, selladas con soplete y bañadas en salsa de soya dulce.", "precio": 12000, "categoria": "Entradas", "imagen_url": "https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
+    {
+      "id": "c1",
+      "nombre": "Hamburguesa Clásica de la Casa",
+      "descripcion": "Carne 100% de res a la plancha, queso cheddar fundido, tocineta crocante, lechuga fresca, tomate, cebolla caramelizada y salsa de la casa.",
+      "precio": 22000,
+      "categoria": "Hamburguesas y Perros",
+      "imagen_url": "https://images.pexels.com/photos/5951590/pexels-photo-5951590.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Favorita",
+      "dias_promo": ""
+    },
+    {
+      "id": "c2",
+      "nombre": "Hamburguesa Doble Bacon & Queso",
+      "descripcion": "Doble carne jugosa, doble queso cheddar, tocineta ahumada, pepinillos y salsa BBQ artesanal en pan brioche.",
+      "precio": 28000,
+      "categoria": "Hamburguesas y Perros",
+      "imagen_url": "https://images.pexels.com/photos/27988490/pexels-photo-27988490.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c3",
+      "nombre": "Perro Caliente Clásico",
+      "descripcion": "Salchicha americana, ripio de papa crujiente, cebolla picada, queso rallado, salsa de piña, rosada, mostaza y salsa de tomate.",
+      "precio": 14000,
+      "categoria": "Hamburguesas y Perros",
+      "imagen_url": "https://images.pexels.com/photos/24868980/pexels-photo-24868980.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c4",
+      "nombre": "La Perra Callejera",
+      "descripcion": "Pan suave, salchicha gratinada, tocineta picada, carne desmechada o pollo, maíz tierno, ripio de papa y baño de salsas de la casa.",
+      "precio": 19000,
+      "categoria": "Hamburguesas y Perros",
+      "imagen_url": "https://images.pexels.com/photos/24868980/pexels-photo-24868980.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Más Pedida",
+      "dias_promo": ""
+    },
+    {
+      "id": "c5",
+      "nombre": "Salchipapa Clásica",
+      "descripcion": "Papas a la francesa crocantes, salchicha dorada, ripio, queso y salsas tradicionales.",
+      "precio": 16000,
+      "categoria": "Salchipapas y Alitas",
+      "imagen_url": "https://images.pexels.com/photos/32757021/pexels-photo-32757021.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c6",
+      "nombre": "Salchipapa Gratinada Especial",
+      "descripcion": "Papas crocantes, salchicha, pollo desmechado, tocineta, queso mozzarella gratinado, maíz y salsas de la casa.",
+      "precio": 25000,
+      "categoria": "Salchipapas y Alitas",
+      "imagen_url": "https://images.pexels.com/photos/32757021/pexels-photo-32757021.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Para Compartir",
+      "dias_promo": ""
+    },
+    {
+      "id": "c7",
+      "nombre": "Alitas BBQ / Miel Mostaza (6 und)",
+      "descripcion": "Seis alitas de pollo crocantes por fuera y jugosas por dentro, bañadas en salsa BBQ ahumada o miel mostaza, acompañadas de papa o ensalada.",
+      "precio": 23000,
+      "categoria": "Salchipapas y Alitas",
+      "imagen_url": "https://images.pexels.com/photos/5805611/pexels-photo-5805611.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c8",
+      "nombre": "Alitas Picantes Estilo Colombia (10 und)",
+      "descripcion": "Diez alitas bien crocantes con toque picante de ají y salsas de la casa, ideales para compartir.",
+      "precio": 34000,
+      "categoria": "Salchipapas y Alitas",
+      "imagen_url": "https://images.pexels.com/photos/5805611/pexels-photo-5805611.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "es_picante": true,
+      "es_pausado": false,
+      "texto_promo": "Picante",
+      "dias_promo": ""
+    },
+    {
+      "id": "c9",
+      "nombre": "Arepa Rellena Reina Pepiada",
+      "descripcion": "Arepa asada rellena con abundante pollo desmechado, aguacate cremoso y mayonesa suave.",
+      "precio": 17000,
+      "categoria": "Arepas y Patacones",
+      "imagen_url": "https://images.pexels.com/photos/29496089/pexels-photo-29496089.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Clásica",
+      "dias_promo": ""
+    },
+    {
+      "id": "c10",
+      "nombre": "Arepa Rellena Carne Mechada y Queso",
+      "descripcion": "Arepa abierta rellena de carne de res desmechada jugosa, queso blanco rallado y aguacate.",
+      "precio": 18000,
+      "categoria": "Arepas y Patacones",
+      "imagen_url": "https://images.pexels.com/photos/32924383/pexels-photo-32924383.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c11",
+      "nombre": "Patacón Venezolano de Carne Mechada",
+      "descripcion": "Dos patacones de plátano verde bien crocantes rellenos con carne mechada, queso blanco, repollo, tomate y salsas.",
+      "precio": 24000,
+      "categoria": "Arepas y Patacones",
+      "imagen_url": "https://cdn.pixabay.com/photo/2015/03/10/14/51/lemonade-664814_1280.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Especial",
+      "dias_promo": ""
+    },
+    {
+      "id": "c12",
+      "nombre": "Patacón Venezolano Mixto (Pollo y Carne)",
+      "descripcion": "Patacones crujientes cargados con pollo y carne desmechada, queso amarillo y blanco, jamón o tocineta y salsas.",
+      "precio": 27000,
+      "categoria": "Arepas y Patacones",
+      "imagen_url": "https://cdn.pixabay.com/photo/2015/03/10/14/51/lemonade-664814_1280.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c13",
+      "nombre": "Limonada de Coco",
+      "descripcion": "Refrescante limonada natural batida con crema de coco y hielo.",
+      "precio": 9500,
+      "categoria": "Bebidas",
+      "imagen_url": "https://images.pexels.com/photos/12580175/pexels-photo-12580175.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Refrescante",
+      "dias_promo": ""
+    },
+    {
+      "id": "c14",
+      "nombre": "Jugo Natural en Agua o Leche",
+      "descripcion": "Preparado al momento con fruta natural (mango, maracuyá, guayaba o mora).",
+      "precio": 8000,
+      "categoria": "Bebidas",
+      "imagen_url": "https://images.pexels.com/photos/13307546/pexels-photo-13307546.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c15",
+      "nombre": "Gaseosa Personal / Colombiana / Manzana",
+      "descripcion": "Bebida gaseosa bien fría en presentación personal.",
+      "precio": 5000,
+      "categoria": "Bebidas",
+      "imagen_url": "https://images.pexels.com/photos/7033796/pexels-photo-7033796.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "c16",
+      "nombre": "Té Helado / Agua con Gas o Sin Gas",
+      "descripcion": "Opción refrescante y ligera para acompañar tu pedido.",
+      "precio": 5500,
+      "categoria": "Bebidas",
+      "imagen_url": "https://images.pexels.com/photos/36673358/pexels-photo-36673358.jpeg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    }
   ],
   "categories": [
-    { "id": "c1", "nombre": "Entradas", "es_pausada": false },
-    { "id": "c2", "nombre": "Rollos Especiales", "es_pausada": false },
-    { "id": "c3", "nombre": "Sushi Perros", "es_pausada": false },
-    { "id": "c4", "nombre": "Ramen", "es_pausada": false },
-    { "id": "c5", "nombre": "Combos", "es_pausada": false }
+    { "id": "cat1", "nombre": "Hamburguesas y Perros", "es_pausada": false },
+    { "id": "cat2", "nombre": "Salchipapas y Alitas", "es_pausada": false },
+    { "id": "cat3", "nombre": "Arepas y Patacones", "es_pausada": false },
+    { "id": "cat4", "nombre": "Bebidas", "es_pausada": false }
   ],
-  "config": { "promo_activa": "true", "promo_texto": "¡2x1 en Rollos Acevichados todos los viernes!", "promo_imagen": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=800" },
-  "tema": { "colorPrimario": "#AD2020", "colorFondo": "#121212", "colorTexto": "#e2e2e2", "colorTextoSuave": "#e3beba", "colorBordes": "#5b403e", "radioBordes": "8", "fuenteHeroEslogan": "Anybody", "fuentePlatoNombre": "Anybody" }
+  "config": {
+    "promo_activa": "false",
+    "promo_texto": "",
+    "promo_imagen": ""
+  },
+  "tema": {
+    "colorPrimario": "#E11D48",
+    "colorFondo": "#121212",
+    "colorTexto": "#f5f5f5",
+    "colorTextoSuave": "#d4d4d8"
+  }
 }
