@@ -80,7 +80,74 @@
     .menu-card-img-wrapper img { transition: transform 0.3s ease; }
     .menu-card:hover .menu-card-img-wrapper img { transform: scale(1.05); }
     .glow-hover:hover { box-shadow: 0 0 15px var(--color-primary); }
+
+             /* --- EFECTO FLUJO ELÉCTRICO SAKURA (CORREGIDO) --- */
+    @keyframes rotar-energia {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes brillo-electrico {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 60, 0.2), 0 0 15px rgba(0, 240, 255, 0.1); }
+      50% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.4), 0 0 25px rgba(0, 240, 255, 0.3); }
+    }
+
+    .card-electrica {
+      position: relative;
+      border-radius: 0.75rem;
+      background-color: #121212; 
+      /* Animación de respiración de luz exterior */
+      animation: brillo-electrico 4s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    /* El flujo de energía (El tubo de neón) */
+    .card-electrica::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: conic-gradient(
+        transparent 0deg,
+        transparent 180deg,
+        rgba(0, 240, 255, 0.1) 220deg,
+        #00f0ff 260deg,
+        #ff003c 300deg,
+        transparent 350deg
+      );
+      animation: rotar-energia 4s linear infinite;
+      animation-delay: var(--delay, 0s);
+      z-index: 0;
+    }
+
+    /* El fondo interior que tapa el centro y deja ver solo un borde de 2px */
+    .card-electrica::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px; right: 2px; bottom: 2px;
+      border-radius: calc(0.75rem - 2px);
+      background-color: #121212; /* El mismo fondo oscuro */
+      z-index: 1;
+    }
+
+    /* Aseguramos que el contenido esté por encima de la máscara */
+    .card-electrica > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* SALTO ELÉCTRICO (Retrasos distintos para cada tarjeta) */
+    .card-electrica:nth-child(1) { --delay: 0s; }
+    .card-electrica:nth-child(2) { --delay: -0.5s; }
+    .card-electrica:nth-child(3) { --delay: -1s; }
+    .card-electrica:nth-child(4) { --delay: -1.5s; }
+    .card-electrica:nth-child(5) { --delay: -2s; }
+    .card-electrica:nth-child(6) { --delay: -2.5s; }
+    .card-electrica:nth-child(7) { --delay: -3s; }
+    .card-electrica:nth-child(8) { --delay: -3.5s; }
+
   </style>
+
+  
 </head>
 <body class="antialiased min-h-screen flex flex-col bg-surface text-on-surface relative">
 
@@ -136,17 +203,47 @@
     </button>
   </div>
 
-  <div id="order-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="order-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-surface border border-outline-30 rounded-xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] shadow-2xl">
+      
+      <!-- Cabecera del Modal -->
       <div class="p-4 border-b border-outline-20 flex justify-between items-center bg-surface-container-lowest">
-        <h3 class="font-modal-titulo size-modal-titulo text-primary flex items-center gap-2"><span class="material-symbols-outlined">format_list_bulleted</span> Selección</h3>
-        <button id="btn-close-cart" class="text-secondary hover:text-sushi-white"><span class="material-symbols-outlined pointer-events-none">close</span></button>
+        <h3 class="font-modal-titulo size-modal-titulo text-primary flex items-center gap-2">
+          <span class="material-symbols-outlined">format_list_bulleted</span> Selección
+        </h3>
+        <button id="btn-close-cart" class="text-secondary hover:text-sushi-white">
+          <span class="material-symbols-outlined pointer-events-none">close</span>
+        </button>
       </div>
+      
+      <!-- Lista de Platos (El JS inyecta aquí) -->
       <div id="modal-item-list" class="p-4 flex-grow overflow-y-auto space-y-3"></div>
-      <div class="p-4 border-t border-outline-20 bg-surface-container-lowest flex justify-between items-center gap-3">
-        <button id="btn-clear-cart" class="px-4 py-2 rounded-lg border border-error/40 text-error font-modal-botones size-modal-botones hover:bg-error/10">Limpiar lista</button>
-        <button id="btn-close-cart-bottom" class="px-5 py-2 rounded-lg bg-primary-container text-sushi-white font-modal-botones size-modal-botones hover:bg-primary">Cerrar</button>
+      
+      <!-- Pie del Modal Modificado -->
+      <div class="p-4 border-t border-outline-20 bg-surface-container-lowest flex flex-col gap-3">
+        
+        <!-- NUEVO: Total a Pagar -->
+        <div class="flex justify-between items-center px-1 mb-1">
+          <span class="text-sm font-bold text-on-surface-variant uppercase tracking-wide">Total a Pagar</span>
+          <span id="modal-total-price" class="text-2xl font-extrabold text-primary">$0</span>
+        </div>
+
+        <!-- NUEVO: Botón de WhatsApp -->
+        <button id="btn-whatsapp-checkout" class="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2 shadow-sm">
+          <span class="material-symbols-outlined text-lg">whatsapp</span> Enviar Pedido por WhatsApp
+        </button>
+
+        <!-- Botones de abajo (Limpiar y Cerrar) -->
+        <div class="flex justify-between items-center gap-3 mt-1">
+          <button id="btn-clear-cart" class="px-4 py-2 rounded-lg border border-error/40 text-error font-modal-botones size-modal-botones hover:bg-error/10 transition-colors">
+            Limpiar lista
+          </button>
+          <button id="btn-close-cart-bottom" class="px-5 py-2 rounded-lg bg-primary-container text-sushi-white font-modal-botones size-modal-botones hover:bg-primary transition-colors">
+            Cerrar
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 

@@ -40,7 +40,8 @@ export const UISakura = {
     }
 
     return `
-      <article class="group ${adminStyles} bg-[#121212] rounded-xl border border-[#5b403e]/50 overflow-hidden flex flex-col sm:flex-row transition-all duration-300 relative hover:border-[#AD2020]/50 shadow-lg">
+      <!-- AQUÍ AGREGAMOS LA CLASE card-electrica Y QUITAMOS EL bg Y border ESTÁTICO -->
+      <article class="card-electrica group ${adminStyles} bg-[#121212] rounded-xl overflow-hidden flex flex-col sm:flex-row transition-all duration-300 relative shadow-lg">
         
         <div class="relative sm:w-2/5 w-full min-h-[190px] aspect-[4/3] sm:aspect-auto sm:min-h-[220px] bg-[#1a1a1a] overflow-hidden shrink-0">
           <img alt="${escapeHTML(item.nombre)}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${escapeHTML(imgUrl)}" onerror="this.onerror=null;this.src='${fallbackUrl}';"/>

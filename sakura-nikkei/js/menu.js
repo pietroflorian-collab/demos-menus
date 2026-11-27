@@ -86,11 +86,19 @@ const SakuraMenu = {
     }
   },
 
-  updateUI() {
+   updateUI() {
     const list = this.getSelection(); 
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");
     
+    // 1. Calcular el precio total del pedido
+    let totalPrecio = 0;
+    list.forEach(item => {
+      const platoInfo = this.allItems.find(p => p.id === item.id);
+      if(platoInfo) totalPrecio += (platoInfo.precio * item.cantidad);
+    });
+
+    // 2. Actualizar el botón flotante (FAB)
     if (totalCount > 0 && fabContainer) { 
       fabContainer.classList.remove("hidden"); 
       document.getElementById("fab-badge").innerText = totalCount; 
@@ -99,6 +107,13 @@ const SakuraMenu = {
       this.closeModal(); 
     }
     
+    // 3. Actualizar el Total en el Modal
+    const modalTotalEl = document.getElementById("modal-total-price");
+    if (modalTotalEl) {
+      modalTotalEl.innerText = `$${totalPrecio.toLocaleString('es-CO')}`;
+    }
+    
+    // 4. Renderizar la lista de platos en el modal
     const modalList = document.getElementById("modal-item-list"); 
     if (!modalList) return;
     
@@ -107,17 +122,20 @@ const SakuraMenu = {
     } else {
       modalList.innerHTML = list.map(item => {
         const platoInfo = this.allItems.find(p => p.id === item.id);
-        const precio = platoInfo ? platoInfo.precio : 0;
+        const precioUnitario = platoInfo ? platoInfo.precio : 0;
         return `
-          <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-1">
             <div class="flex flex-col">
               <span class="font-semibold text-white">${escapeHTML(item.nombre)}</span>
-              <span class="text-sm text-gray-400">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
+              <span class="text-[11px] text-gray-400">$${precioUnitario.toLocaleString('es-CO')} c/u</span>
             </div>
-            <div class="flex items-center gap-3 bg-gray-800 rounded-lg px-2 py-1">
-              <button data-action="decrease" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold">-</button>
-              <span class="text-sm font-semibold w-4 text-center text-white">${item.cantidad}</span>
-              <button data-action="increase" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold">+</button>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold text-primary">$${(precioUnitario * item.cantidad).toLocaleString('es-CO')}</span>
+              <div class="flex items-center gap-2 bg-gray-800 rounded-lg px-2 py-1">
+                <button data-action="decrease" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold px-1">-</button>
+                <span class="text-sm font-semibold w-4 text-center text-white">${item.cantidad}</span>
+                <button data-action="increase" data-id="${item.id}" class="text-gray-300 hover:text-white font-bold px-1">+</button>
+              </div>
             </div>
           </div>
         `;
@@ -153,18 +171,20 @@ const SakuraMenu = {
     this.updateUI();
   },
 
-  bindEvents() {
+    bindEvents() {
     const bindClick = (id, fn) => document.getElementById(id)?.addEventListener('click', fn);
     
     bindClick("btn-open-cart", () => this.openModal()); 
     bindClick("btn-close-cart", () => this.closeModal()); 
+    bindClick("btn-close-cart-bottom", () => this.closeModal()); // Agregado para el botón inferior
     bindClick("btn-clear-cart", () => this.clearList()); 
 
+    // --- LÓGICA DE WHATSAPP (Línea por línea) ---
     bindClick("btn-whatsapp-checkout", () => {
       const list = this.getSelection();
       if (list.length === 0) { showToast("Agrega platos a tu lista primero", "error"); return; }
       
-      const numeroWhatsApp = "573000000000"; // Configurar
+      const numeroWhatsApp = "573025303152"; // Recuerda poner el número real de Sakura aquí
       let mensaje = "¡Hola! Quisiera hacer el siguiente pedido:\n\n";
       let total = 0;
       
