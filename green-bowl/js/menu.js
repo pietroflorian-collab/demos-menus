@@ -90,14 +90,12 @@ const GreenBowlMenu = {
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");
     
-    // Calcular el precio total del pedido
     let totalPrecio = 0;
     list.forEach(item => {
       const platoInfo = this.allItems.find(p => p.id === item.id);
       if(platoInfo) totalPrecio += (platoInfo.precio * item.cantidad);
     });
 
-    // Actualizar botón flotante
     if (totalCount > 0 && fabContainer) { 
       fabContainer.classList.remove("hidden"); 
       document.getElementById("cart-item-count").innerText = totalCount;
@@ -106,13 +104,11 @@ const GreenBowlMenu = {
       this.closeModal(); 
     }
     
-    // Actualizar el Total en el Modal
     const modalTotalEl = document.getElementById("modal-total-price");
     if (modalTotalEl) {
       modalTotalEl.innerText = `$${totalPrecio.toLocaleString('es-CO')}`;
     }
     
-    // Renderizar la lista dentro del modal
     const modalList = document.getElementById("modal-item-list"); 
     if (!modalList) return;
     
@@ -151,9 +147,10 @@ const GreenBowlMenu = {
       this.tema = data.tema || {};
       this.aplicarTema(this.tema);
 
-      document.getElementById('brand-title').innerText = "Green Bowl";
-      document.getElementById('brand-slogan').innerText = this.tema.eslogan || "Diseño Green Bowl";
-      document.getElementById('brand-desc').innerText = "Energía que te impulsa. Nutrición que te transforma.";
+      // TEXTOS CORREGIDOS PARA EL GIMNASIO
+      document.getElementById('brand-title').innerText = "Training Coffee Shop";
+      document.getElementById('brand-slogan').innerText = this.tema.eslogan || "Combustible para tu entrenamiento";
+      document.getElementById('brand-desc').innerText = "Energía que te impulsa. Nutrición que te transforma. Batidos, proteínas y café de especialidad.";
 
       this.allItems = data.items || [];
       this.categoriesList = data.categories || [];
@@ -177,7 +174,6 @@ const GreenBowlMenu = {
     bindClick("btn-close-cart", () => this.closeModal()); 
     bindClick("btn-clear-cart", () => this.clearList()); 
 
-    // --- LÓGICA DE WHATSAPP ---
     bindClick("btn-whatsapp-checkout", () => {
       const list = this.getSelection();
       if (list.length === 0) {
@@ -201,13 +197,11 @@ const GreenBowlMenu = {
       window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
     });
 
-    // EVENTOS DE LA GRILLA (Añadir platos)
     document.getElementById("menu-grid")?.addEventListener('click', (e) => { 
       const btn = e.target.closest('button[data-action="add-to-cart"]'); 
       if (btn) this.toggleSelection(btn.dataset.id, btn.dataset.name); 
     });
 
-    // EVENTOS DEL MODAL (Sumar/Restar cantidades)
     document.getElementById("modal-item-list")?.addEventListener('click', (e) => { 
       const btn = e.target.closest('button[data-action]'); 
       if (!btn) return; 
@@ -215,7 +209,6 @@ const GreenBowlMenu = {
       if (btn.dataset.action === 'increase') this.updateQuantity(btn.dataset.id, 1); 
     });
 
-    // EVENTOS DE CATEGORÍA
     document.getElementById("category-bar")?.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-category]');
       if (btn) this.filterCategory(btn.dataset.category);
@@ -232,10 +225,10 @@ const GreenBowlMenu = {
     
     const getIcon = (nombre) => {
       const n = nombre.toLowerCase();
-      if (n.includes('hamburguesa') || n.includes('perro')) return 'lunch_dining';
-      if (n.includes('salchipapa') || n.includes('alita')) return 'local_fire_department';
-      if (n.includes('arepa') || n.includes('patacón') || n.includes('patacon')) return 'bakery_dining';
-      if (n.includes('bebida') || n.includes('jugo')) return 'local_drink';
+      if (n.includes('energía') || n.includes('entreno')) return 'bolt';
+      if (n.includes('proteína') || n.includes('batido')) return 'fitness_center';
+      if (n.includes('sandwich') || n.includes('bowl')) return 'lunch_dining';
+      if (n.includes('café') || n.includes('snack')) return 'local_cafe';
       return 'restaurant';
     };
 
