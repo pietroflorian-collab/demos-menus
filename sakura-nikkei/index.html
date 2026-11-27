@@ -59,7 +59,7 @@
     document.getElementById('og-title').content = `${AppConfig.cliente.nombre} - Menú`;
     document.getElementById('og-desc').content = AppConfig.cliente.descripcionComercial;
     document.getElementById('og-url').content = baseUrl ? `${baseUrl}/` : window.location.href;
-    document.getElementById('og-image').content = baseUrl ? `${baseUrl}/images/logo1.png` : 'images/logo1.png';
+    document.getElementById('og-image').content = baseUrl ? `${baseUrl}/images/logo1.png` : 'images/logo1.jpg';
     document.getElementById('brand-title').innerText = `${AppConfig.cliente.nombre} MENÚ`;
     document.getElementById('brand-slogan').innerText = AppConfig.cliente.eslogan;
     document.getElementById('brand-desc').innerText = AppConfig.cliente.descripcionComercial;
@@ -71,7 +71,7 @@
 
   <style>
     body {
-      background-image: url('images/logo12.png');
+      background-image: url('images/bg-login.web');
       background-repeat: repeat;
     }
     button { border: none; outline: none; }
@@ -109,7 +109,7 @@
           <p id="brand-desc" class="font-hero-descripcion size-hero-descripcion text-on-surface max-w-lg"></p>
         </div>
         <div class="flex-1 flex justify-center items-center py-2 shrink-0">
-          <img alt="Mascota" class="w-28 h-28 md:w-52 md:h-52 object-contain rebote-amplio" src="images/logo1.png"/>
+          <img alt="Mascota" class="w-28 h-28 md:w-52 md:h-52 object-contain rebote-amplio" src="images/logo1.jpg"/>
         </div>
       </div>
     </section>

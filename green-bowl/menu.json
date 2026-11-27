@@ -1,24 +1,193 @@
 {
   "items": [
-    { "id": "g1", "nombre": "Bowl Mediterráneo", "descripcion": "Quinoa tricolor, garbanzos crocantes, pepino persa, hummus de remolacha y tahini de sésamo dorado.", "precio": 22000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Popular", "dias_promo": "" },
-    { "id": "g2", "nombre": "Salmon Truffle & Ponzu", "descripcion": "Salmón salvaje marinado, aguacate hass, edamame, arroz jazmín orgánico y aderezo trufado.", "precio": 26000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Favorito", "dias_promo": "" },
-    { "id": "g3", "nombre": "Green Goddess", "descripcion": "Kale masajeado, láminas de aguacate, brotes de alfalfa, semillas de calabaza y aderezo verde cremoso.", "precio": 24000, "categoria": "Signature Bowls", "imagen_url": "https://images.unsplash.com/photo-1626804475297-41609ea0d897?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Keto", "dias_promo": "" },
-    { "id": "g4", "nombre": "Warm Chipotle Tofu", "descripcion": "Tofu ahumado a la plancha, maíz dulce asado, frijol negro y quinoa con emulsión de chipotle suave.", "precio": 21000, "categoria": "Warm Grain Bowls", "imagen_url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=400", "es_picante": true, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "g5", "nombre": "Golden Tempeh", "descripcion": "Tempeh glaseado al miso dulce, zanahoria en juliana, repollo morado y arroz integral al vapor.", "precio": 20000, "categoria": "Warm Grain Bowls", "imagen_url": "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Vegano", "dias_promo": "" },
-    { "id": "g6", "nombre": "César de Kale Crunch", "descripcion": "Hojas de kale orgánico, aderezo césar de anacardos, crutones de pan de masa madre y lascas de parmesano.", "precio": 18000, "categoria": "Fresh Greens", "imagen_url": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "g7", "nombre": "Wrap de Pollo Pesto", "descripcion": "Tortilla integral, pechuga de pollo a la parrilla, pesto de albahaca, tomate y rúcula fresca.", "precio": 19000, "categoria": "Fresh Greens", "imagen_url": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "g8", "nombre": "Jugo Verde Detox", "descripcion": "Espinaca, apio, manzana verde, jengibre y limón. 100% orgánico y prensado en frío.", "precio": 9000, "categoria": "Cold Pressed", "imagen_url": "https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "Detox", "dias_promo": "" },
-    { "id": "g9", "nombre": "Matcha Latte Frío", "descripcion": "Té matcha ceremonial, leche de avena y un toque de sirope de agave. Servido con hielo.", "precio": 12000, "categoria": "Cold Pressed", "imagen_url": "https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "g10", "nombre": "Cheesecake de Maracuyá", "descripcion": "Base de nueces y dátiles, crema de anacardos y coulis de maracuyá fresco. Sin azúcar refinada.", "precio": 14000, "categoria": "Postres Raw", "imagen_url": "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" },
-    { "id": "g11", "nombre": "Brownie Vegano de Cacao", "descripcion": "Brownie denso de cacao puro, harina de almendras y nueces. Acompañado de helado de coco.", "precio": 13000, "categoria": "Postres Raw", "imagen_url": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80&w=400", "es_picante": false, "es_pausado": false, "texto_promo": "", "dias_promo": "" }
+    {
+      "id": "t1",
+      "nombre": "Monster Energy Original / Ultra",
+      "descripcion": "Lata helada de Monster Energy. El impulso de energía y cafeína que necesitas para romperla en el entrenamiento.",
+      "precio": 9000,
+      "categoria": "Energía & Pre-Entreno",
+      "imagen_url": "./images/monster.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Energía Pura",
+      "dias_promo": ""
+    },
+    {
+      "id": "t2",
+      "nombre": "Pre-Entreno en Polvo / Shot",
+      "descripcion": "Fórmula avanzada de pre-entreno con cafeína, beta-alanina y arginina. Lleva tu bombeo y resistencia al siguiente nivel.",
+      "precio": 15000,
+      "categoria": "Energía & Pre-Entreno",
+      "imagen_url": "./images/prentreno.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Rendimiento",
+      "dias_promo": ""
+    },
+    {
+      "id": "t3",
+      "nombre": "Bebida Hidratante con Electrolitos",
+      "descripcion": "Reposición de sales minerales y electrolitos perdidos durante el entrenamiento. Sabor cítrico refrescante.",
+      "precio": 8000,
+      "categoria": "Energía & Pre-Entreno",
+      "imagen_url": "./images/electrolit.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "t4",
+      "nombre": "Batido de Proteína Whey (Chocolate/Vainilla)",
+      "descripcion": "Doble scoop de proteína de suero de leche de alta calidad. Perfecto para la recuperación muscular post-entreno.",
+      "precio": 12000,
+      "categoria": "Proteínas & Batidos",
+      "imagen_url": "./images/whey.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Post-Entreno",
+      "dias_promo": ""
+    },
+    {
+      "id": "t5",
+      "nombre": "Mass Gainer (Batido Ganador de Peso)",
+      "descripcion": "Batido hipercalórico con mezcla de carbohidratos complejos y proteína. Ideal para volumen y fuerza.",
+      "precio": 16000,
+      "categoria": "Proteínas & Batidos",
+      "imagen_url": "./images/mass.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Volumen",
+      "dias_promo": ""
+    },
+    {
+      "id": "t6",
+      "nombre": "Shot de Creatina / BCAA",
+      "descripcion": "Shot concentrado de aminoácidos ramificados o creatina monohidratada para maximizar tu rendimiento.",
+      "precio": 7000,
+      "categoria": "Proteínas & Batidos",
+      "imagen_url": "./images/bcaa.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "t7",
+      "nombre": "Bebida Proteica Lista para Tomar",
+      "descripcion": "Botella de proteína lista para llevar. Práctica, rápida y con el aporte exacto de proteína que tu cuerpo necesita.",
+      "precio": 10000,
+      "categoria": "Proteínas & Batidos",
+      "imagen_url": "./images/listatomar.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Práctico",
+      "dias_promo": ""
+    },
+    {
+      "id": "t8",
+      "nombre": "Sándwich de Pollo y Aguacate (Pan Integral)",
+      "descripcion": "Pan de masa madre integral, pechuga de pollo a la parrilla, aguacate, tomate y lechuga. Alto en proteína.",
+      "precio": 18000,
+      "categoria": "Fit Sandwiches & Bowls",
+      "imagen_url": "./images/sandwich.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Favorito",
+      "dias_promo": ""
+    },
+    {
+      "id": "t9",
+      "nombre": "Bowl Proteico de Claras y Quinoa",
+      "descripcion": "Base de quinoa, claras de huevo revueltas, espinaca fresca, aguacate y aderezo de la casa.",
+      "precio": 22000,
+      "categoria": "Fit Sandwiches & Bowls",
+      "imagen_url": "./images/quinua.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Alto en Proteína",
+      "dias_promo": ""
+    },
+    {
+      "id": "t10",
+      "nombre": "Wrap de Atún o Pavo",
+      "descripcion": "Tortilla integral rellena de atún en agua o pavo ahumado, con vegetales frescos y un toque de mostaza.",
+      "precio": 17000,
+      "categoria": "Fit Sandwiches & Bowls",
+      "imagen_url": "./images/wrap.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "t11",
+      "nombre": "Café Americano / Espresso",
+      "descripcion": "Café de especialidad de la región. La dosis justa de cafeína pre-entreno para empezar con toda.",
+      "precio": 5000,
+      "categoria": "Café & Snacks",
+      "imagen_url": "./images/expreso.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Pre-Entreno",
+      "dias_promo": ""
+    },
+    {
+      "id": "t12",
+      "nombre": "Barra de Proteína (Diferentes Marcas)",
+      "descripcion": "Barra de proteína de 20g. Perfecta para un snack rápido antes o después de entrenar.",
+      "precio": 10000,
+      "categoria": "Café & Snacks",
+      "imagen_url": "./images/barraproteina.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "Snack",
+      "dias_promo": ""
+    },
+    {
+      "id": "t13",
+      "nombre": "Galletas de Avena y Proteína",
+      "descripcion": "Galletas horneadas con avena, proteína en polvo y chispas de cacao. Dulce, pero fit.",
+      "precio": 8000,
+      "categoria": "Café & Snacks",
+      "imagen_url": "./images/galletas.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    },
+    {
+      "id": "t14",
+      "nombre": "Porción de Frutos Secos / Almendras",
+      "descripcion": "Mix de almendras, nueces y arándanos. Grasas saludables para mantener la energía durante el día.",
+      "precio": 6000,
+      "categoria": "Café & Snacks",
+      "imagen_url": "./images/frutosecos.jpg",
+      "es_picante": false,
+      "es_pausado": false,
+      "texto_promo": "",
+      "dias_promo": ""
+    }
   ],
   "categories": [
-    { "id": "c1", "nombre": "Signature Bowls", "es_pausada": false },
-    { "id": "c2", "nombre": "Warm Grain Bowls", "es_pausada": false },
-    { "id": "c3", "nombre": "Fresh Greens", "es_pausada": false },
-    { "id": "c4", "nombre": "Cold Pressed", "es_pausada": false },
-    { "id": "c5", "nombre": "Postres Raw", "es_pausada": false }
+    { "id": "c1", "nombre": "Energía & Pre-Entreno", "es_pausada": false },
+    { "id": "c2", "nombre": "Proteínas & Batidos", "es_pausada": false },
+    { "id": "c3", "nombre": "Fit Sandwiches & Bowls", "es_pausada": false },
+    { "id": "c4", "nombre": "Café & Snacks", "es_pausada": false }
   ],
-  "config": { "promo_activa": "false" },
-  "tema": { "colorPrimario": "#005ab7", "colorFondo": "#f9f9f9", "colorTexto": "#1a1c1c", "colorTextoSuave": "#46464a", "colorBordes": "#e2e2e2", "radioBordes": "16", "fuenteHeroEslogan": "Inter", "fuentePlatoNombre": "Inter" }
+  "config": { 
+    "promo_activa": "true",
+    "promo_texto": "¡Muestra tu carnet del gym y obtén 10% de descuento en batidos!",
+    "promo_imagen": ""
+  },
+  "tema": { 
+    "colorPrimario": "#005ab7", 
+    "colorFondo": "#f9f9f9", 
+    "colorTexto": "#1a1c1c", 
+    "colorTextoSuave": "#46464a", 
+    "colorBordes": "#e2e2e2", 
+    "radioBordes": "16", 
+    "fuenteHeroEslogan": "Inter", 
+    "fuentePlatoNombre": "Inter" 
+  }
 }

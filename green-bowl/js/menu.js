@@ -1,5 +1,5 @@
 ﻿﻿import { MenuAPI, escapeHTML, showToast } from './api.js';
-import { UIMinimal } from './ui-minimal.js'; // Importamos el diseño de Stitch
+import { UIMinimal } from './ui-minimal.js';
 
 const GreenBowlMenu = {
   allItems: [], 
@@ -49,8 +49,7 @@ const GreenBowlMenu = {
     if (modal) {
       modal.classList.remove("hidden");
       setTimeout(() => {
-        modal.classList.remove("opacity-0");
-        document.getElementById("modal-content").classList.remove("scale-95");
+        modal.classList.add("modal-enter");
       }, 10);
     }
   },
@@ -58,82 +57,85 @@ const GreenBowlMenu = {
   closeModal() { 
     const modal = document.getElementById("order-modal");
     if (modal) {
-      modal.classList.add("opacity-0");
-      document.getElementById("modal-content").classList.add("scale-95");
+      modal.classList.remove("modal-enter");
       setTimeout(() => modal.classList.add("hidden"), 300);
     }
   },
 
-  // --- MOTOR DE APARIENCIA (Lee los colores del JSON) ---
   aplicarTema(tema) {
     if (!tema) return;
     const HEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
     const val = (v) => { if (!v) return null; const s = String(v).trim(); return HEX.test(s) ? s : null; };
 
-    const colorPrimario   = val(tema.colorPrimario);
-    const colorFondo      = val(tema.colorFondo);
+    const colorPrimario = val(tema.colorPrimario);
+    const colorFondo = val(tema.colorFondo);
     
     if (colorPrimario || colorFondo) {
       let styleEl = document.getElementById('dynamic-theme');
       if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'dynamic-theme'; document.head.appendChild(styleEl); }
       let css = ':root {\n';
-      if (colorPrimario) { 
-        css += `  --color-primary: ${colorPrimario};\n`; 
-      }
-      if (colorFondo) { 
-        css += `  --color-surface: ${colorFondo};\n`; 
-      }
+      if (colorPrimario) css += `  --color-primary: ${colorPrimario};\n`; 
+      if (colorFondo) css += `  --color-surface: ${colorFondo};\n`; 
       css += '}';
       styleEl.textContent = css;
     }
     
-    // Aplicar fuentes si vienen en el JSON
     if (tema.fuenteHeroEslogan) {
       document.getElementById('brand-slogan').style.fontFamily = `'${tema.fuenteHeroEslogan}', sans-serif`;
     }
   },
 
-    updateUI() {
+  updateUI() {
     const list = this.getSelection(); 
     const totalCount = list.reduce((acc, curr) => acc + curr.cantidad, 0); 
     const fabContainer = document.getElementById("fab-container");
     
+    // Calcular el precio total del pedido
+    let totalPrecio = 0;
+    list.forEach(item => {
+      const platoInfo = this.allItems.find(p => p.id === item.id);
+      if(platoInfo) totalPrecio += (platoInfo.precio * item.cantidad);
+    });
+
+    // Actualizar botón flotante
     if (totalCount > 0 && fabContainer) { 
       fabContainer.classList.remove("hidden"); 
-      
-      let totalPrecio = 0;
-      list.forEach(item => {
-        const platoInfo = this.allItems.find(p => p.id === item.id);
-        if(platoInfo) totalPrecio += (platoInfo.precio * item.cantidad);
-      });
-
-      document.getElementById("cart-item-count").innerText = `Mi Pedido (${totalCount})`;
-      document.getElementById("cart-total-price").innerText = `$${totalPrecio.toLocaleString('es-CO')}`;
-      
+      document.getElementById("cart-item-count").innerText = totalCount;
     } else if (fabContainer) { 
       fabContainer.classList.add("hidden"); 
       this.closeModal(); 
     }
     
+    // Actualizar el Total en el Modal
+    const modalTotalEl = document.getElementById("modal-total-price");
+    if (modalTotalEl) {
+      modalTotalEl.innerText = `$${totalPrecio.toLocaleString('es-CO')}`;
+    }
+    
+    // Renderizar la lista dentro del modal
     const modalList = document.getElementById("modal-item-list"); 
     if (!modalList) return;
     
     if (list.length === 0) {
-      modalList.innerHTML = `<div class="text-center py-8"><p class="text-gray-500 italic">La comanda está vacía.</p></div>`;
+      modalList.innerHTML = `<div class="text-center py-8"><p class="text-on-surface-variant italic">La comanda está vacía.</p></div>`;
     } else {
       modalList.innerHTML = list.map(item => {
         const platoInfo = this.allItems.find(p => p.id === item.id);
-        const precio = platoInfo ? platoInfo.precio : 0;
+        const precioUnitario = platoInfo ? platoInfo.precio : 0;
         return `
-          <div class="flex items-center justify-between border-b border-[#ddc0bf] pb-3">
+          <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-1">
             <div class="flex flex-col">
-              <span class="font-display font-bold text-gray-900">${escapeHTML(item.nombre)}</span>
-              <span class="text-sm text-gray-700">$${(precio * item.cantidad).toLocaleString('es-CO')}</span>
+              <span class="font-bold text-gray-900 text-sm leading-tight mb-1">${escapeHTML(item.nombre)}</span>
+              <span class="text-[11px] text-gray-500 font-medium">$${precioUnitario.toLocaleString('es-CO')} c/u</span>
             </div>
-            <div class="flex items-center gap-3 border border-gray-400 px-2 py-1">
-              <button data-action="decrease" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">-</button>
-              <span class="text-sm font-semibold w-4 text-center text-gray-900">${item.cantidad}</span>
-              <button data-action="increase" data-id="${item.id}" class="text-gray-700 hover:text-black font-bold">+</button>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold text-primary">$${(precioUnitario * item.cantidad).toLocaleString('es-CO')}</span>
+              
+              <div class="flex items-center gap-2 bg-white border border-gray-200 px-2 py-1 rounded-lg shadow-sm">
+                <button data-action="decrease" data-id="${item.id}" class="text-gray-500 hover:text-primary font-bold px-1">-</button>
+                <span class="text-sm font-semibold w-4 text-center text-gray-900">${item.cantidad}</span>
+                <button data-action="increase" data-id="${item.id}" class="text-gray-500 hover:text-primary font-bold px-1">+</button>
+              </div>
             </div>
           </div>
         `;
@@ -149,10 +151,9 @@ const GreenBowlMenu = {
       this.tema = data.tema || {};
       this.aplicarTema(this.tema);
 
-      // INYECTAR DATOS EN EL HTML DE STITCH
       document.getElementById('brand-title').innerText = "Green Bowl";
-      document.getElementById('brand-slogan').innerText = this.tema.eslogan || "Come limpio, vive mejor";
-      document.getElementById('brand-desc').innerText = "Ingredientes orgánicos, cosechados éticamente y preparados al instante para nutrir tu día.";
+      document.getElementById('brand-slogan').innerText = this.tema.eslogan || "Diseño Green Bowl";
+      document.getElementById('brand-desc').innerText = "Energía que te impulsa. Nutrición que te transforma.";
 
       this.allItems = data.items || [];
       this.categoriesList = data.categories || [];
@@ -176,7 +177,7 @@ const GreenBowlMenu = {
     bindClick("btn-close-cart", () => this.closeModal()); 
     bindClick("btn-clear-cart", () => this.clearList()); 
 
-    // BOTÓN DE WHATSAPP
+    // --- LÓGICA DE WHATSAPP ---
     bindClick("btn-whatsapp-checkout", () => {
       const list = this.getSelection();
       if (list.length === 0) {
@@ -184,7 +185,7 @@ const GreenBowlMenu = {
         return;
       }
       
-      const numeroWhatsApp = "573000000000"; // Pon el número real aquí
+      const numeroWhatsApp = "573025303152"; // RECUERDA PONER TU NÚMERO AQUÍ
       let mensaje = "¡Hola! Quisiera hacer el siguiente pedido:\n\n";
       let total = 0;
       
@@ -197,7 +198,6 @@ const GreenBowlMenu = {
       });
       
       mensaje += `\n*Total: $${total.toLocaleString('es-CO')}*`;
-      
       window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
     });
 
@@ -230,13 +230,30 @@ const GreenBowlMenu = {
 
     const categoryBar = document.getElementById("category-bar");
     
-    // Inyectamos los botones con el diseño de Stitch (píldoras)
-    categoryBar.innerHTML = categoriasVisibles.map(cat => `
-      <button data-category="${escapeHTML(cat)}" class="category-btn shrink-0 rounded-full px-6 py-2.5 font-semibold text-sm transition-all duration-200 
-      ${this.selectedCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}">
-        ${escapeHTML(cat)}
+    const getIcon = (nombre) => {
+      const n = nombre.toLowerCase();
+      if (n.includes('hamburguesa') || n.includes('perro')) return 'lunch_dining';
+      if (n.includes('salchipapa') || n.includes('alita')) return 'local_fire_department';
+      if (n.includes('arepa') || n.includes('patacón') || n.includes('patacon')) return 'bakery_dining';
+      if (n.includes('bebida') || n.includes('jugo')) return 'local_drink';
+      return 'restaurant';
+    };
+
+    categoryBar.innerHTML = categoriasVisibles.map(cat => {
+      const isActive = this.selectedCategory === cat;
+      const icon = getIcon(cat);
+      
+      return `
+      <button data-category="${escapeHTML(cat)}" class="flex flex-col items-center gap-2 group min-w-[70px] outline-none">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-primary text-white shadow-lg shadow-green-900/20 scale-110' : 'bg-white shadow-sm text-primary group-hover:bg-primary-light'}">
+          <span class="material-symbols-outlined text-2xl">${icon}</span>
+        </div>
+        <span class="text-[11px] font-semibold transition-colors text-center leading-tight ${isActive ? 'text-primary' : 'text-on-surface-variant group-hover:text-primary'}">
+          ${escapeHTML(cat)}
+        </span>
       </button>
-    `).join("");
+      `;
+    }).join("");
 
     const titleEl = document.getElementById("current-category-title");
     if (titleEl) titleEl.innerText = this.selectedCategory;
@@ -247,7 +264,6 @@ const GreenBowlMenu = {
     if (!grid) return;
     
     const filtered = this.allItems.filter(i => {
-      // Filtramos por la categoría seleccionada
       return i.categoria === this.selectedCategory;
     });
 
@@ -256,7 +272,6 @@ const GreenBowlMenu = {
       return;
     }
 
-    // Renderizamos usando la UI Minimal
     grid.innerHTML = filtered.map(item => UIMinimal.generarTarjetaPlato(item, 'client', this.getSelection())).join("");
   },
 
