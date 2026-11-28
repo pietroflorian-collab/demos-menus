@@ -154,7 +154,7 @@ const SakuraMenu = {
       // Inyección de datos en el HTML
       document.getElementById('brand-title').innerText = "SAKURA NIKKEI";
       document.getElementById('brand-slogan').innerText = "Fusión Sin Límites";
-      document.getElementById('brand-desc').innerText = "Los mejores cortes de sushi y platos nikkei en un ambiente único.";
+      document.getElementById('brand-desc').innerText = "Combustible limpio para potenciar tu rendimiento. Café, proteína y energía.";
 
       this.allItems = data.items || [];
       this.categoriesList = data.categories || [];
