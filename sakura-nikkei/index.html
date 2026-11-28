@@ -81,58 +81,47 @@
     .menu-card:hover .menu-card-img-wrapper img { transform: scale(1.05); }
     .glow-hover:hover { box-shadow: 0 0 15px var(--color-primary); }
 
-             /* --- EFECTO FLUJO ELÉCTRICO SAKURA (CORREGIDO) --- */
-    @keyframes rotar-energia {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes brillo-electrico {
-      0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 60, 0.2), 0 0 15px rgba(0, 240, 255, 0.1); }
-      50% { box-shadow: 0 0 20px rgba(255, 0, 60, 0.4), 0 0 25px rgba(0, 240, 255, 0.3); }
-    }
-
-    .card-electrica {
+         /* --- ESTILO NEÓN CYBERPUNK SAKURA --- */
+    
+    /* Efecto para el Banner Principal (Hero) y las tarjetas */
+    .neon-border {
       position: relative;
-      border-radius: 0.75rem;
-      background-color: #121212; 
-      /* Animación de respiración de luz exterior */
-      animation: brillo-electrico 4s ease-in-out infinite;
-      animation-delay: var(--delay, 0s);
+      border-radius: 1rem;
+      background: #121212;
+      /* Borde degradado Cian a Púrpura/Rosa */
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      /* Efecto de brillo exterior (Neon Glow) */
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), 0 0 25px rgba(255, 0, 60, 0.3);
+      transition: box-shadow 0.3s ease;
     }
 
-    /* El flujo de energía (El tubo de neón) */
-    .card-electrica::before {
-      content: '';
+    /* El degradado del borde */
+    .neon-border::before {
+      content: "";
       position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: conic-gradient(
-        transparent 0deg,
-        transparent 180deg,
-        rgba(0, 240, 255, 0.1) 220deg,
-        #00f0ff 260deg,
-        #ff003c 300deg,
-        transparent 350deg
-      );
-      animation: rotar-energia 4s linear infinite;
-      animation-delay: var(--delay, 0s);
-      z-index: 0;
+      inset: -1px; /* Grosor del borde */
+      border-radius: 1rem;
+      padding: 1px;
+      background: linear-gradient(45deg, #00f0ff, #ff003c);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
 
-    /* El fondo interior que tapa el centro y deja ver solo un borde de 2px */
-    .card-electrica::after {
-      content: '';
-      position: absolute;
-      top: 2px; left: 2px; right: 2px; bottom: 2px;
-      border-radius: calc(0.75rem - 2px);
-      background-color: #121212; /* El mismo fondo oscuro */
-      z-index: 1;
+    .neon-border:hover {
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), 0 0 30px rgba(255, 0, 60, 0.4);
     }
 
-    /* Aseguramos que el contenido esté por encima de la máscara */
-    .card-electrica > * {
-      position: relative;
-      z-index: 2;
+    /* Animación de pulso suave para el banner */
+    @keyframes neon-pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.3), 0 0 20px rgba(255, 0, 60, 0.2); }
+      50% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 40px rgba(255, 0, 60, 0.5); }
+    }
+    
+    .banner-neon {
+      animation: neon-pulse 3s infinite;
     }
 
     /* SALTO ELÉCTRICO (Retrasos distintos para cada tarjeta) */
@@ -145,11 +134,19 @@
     .card-electrica:nth-child(7) { --delay: -3s; }
     .card-electrica:nth-child(8) { --delay: -3.5s; }
 
+        .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
   </style>
 
   
 </head>
-<body class="antialiased min-h-screen flex flex-col bg-surface text-on-surface relative">
+<body class="antialiased min-h-screen flex flex-col bg-[#0a0a0a] text-on-surface relative overflow-x-hidden" style="background-image: radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.05), transparent 25%), radial-gradient(circle at 85% 30%, rgba(255, 0, 60, 0.05), transparent 25%);">
 
   <div id="maintenance-overlay" class="fixed inset-0 bg-surface-container-lowest z-[99999] flex-col items-center justify-center p-6 hidden">
     <div class="text-center max-w-md w-full bg-surface-container-low p-8 rounded-2xl border border-error/30 shadow-2xl">
@@ -169,7 +166,7 @@
   </nav>
 
   <main class="flex-grow w-full max-w-7xl mx-auto px-5 md:px-12 py-6">
-    <section class="relative rounded-xl overflow-hidden mb-6 bg-surface-container border border-outline-20">
+     <section class="neon-border banner-neon relative rounded-xl overflow-hidden mb-6 bg-[#121212]">
       <div class="flex flex-col md:flex-row items-center p-4 md:p-6 gap-4 relative z-10">
         <div class="flex-1 space-y-2">
           <h1 id="brand-slogan" class="font-hero-eslogan size-hero-eslogan text-primary leading-tight"></h1>
@@ -181,8 +178,9 @@
       </div>
     </section>
 
-    <section class="bg-surface-container-lowest border border-outline-20 rounded-xl p-2.5 md:p-3 mb-4">
-      <div id="category-bar" class="flex flex-wrap gap-2 md:gap-3 justify-center"></div>
+        <!-- CATEGORÍAS STICKY -->
+    <section class="sticky top-[72px] z-30 bg-[#121212]/90 backdrop-blur-md border border-outline-20 rounded-xl p-2.5 md:p-3 mb-4 shadow-lg">
+      <div id="category-bar" class="flex overflow-x-auto gap-2 md:gap-3 no-scrollbar md:justify-center"></div>
     </section>
 
     <section class="mb-16">
@@ -191,7 +189,7 @@
         <span class="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
         <p class="mt-2 text-secondary font-hero-descripcion">Cargando menú...</p>
       </div>
-      <div id="menu-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 hidden"></div>
+      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 hidden px-2 md:px-4"></div>
     </section>
   </main>
 
